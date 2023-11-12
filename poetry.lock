@@ -12,6 +12,22 @@ files = [
 ]
 
 [[package]]
+name = "api-deezer-full"
+version = "0.0.1b0"
+description = "Wrapper for all 'hidden' deezer APIs"
+optional = false
+python-versions = ">=3.12,<4.0"
+files = [
+    {file = "api_deezer_full-0.0.1b0-py3-none-any.whl", hash = "sha256:300fdd08a3d39dd17137bbbe8e31240a1d162082740f98f7f8d7d7b60bb990fe"},
+    {file = "api_deezer_full-0.0.1b0.tar.gz", hash = "sha256:06d7704ff35c99a0626b39918a29ef6dfae5b564da37b4939fe51249f9530e54"},
+]
+
+[package.dependencies]
+pydantic = "2.4.1"
+pyjwt = "2.8.0"
+requests = "2.31.0"
+
+[[package]]
 name = "certifi"
 version = "2023.7.22"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -241,12 +257,13 @@ docs = ["Sphinx (>=4.1.2,<5.0.0)", "furo (>=2021.8.17-beta.43,<2022.0.0)", "myst
 
 [[package]]
 name = "lm-deezer-bf-dec"
-version = "0.0.1b0"
-description = ""
+version = "0.0.1b2"
+description = "A simple RUST package with scope to speed up the blowfish decryption process for deezer tracks."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "lm_deezer_bf_dec-0.0.1b0-cp312-cp312-manylinux_2_34_x86_64.whl", hash = "sha256:1314bdcfd2158ceb5eaa1eff62445df14169a873d65f4ebc24b6d45b2e2121de"},
+    {file = "lm_deezer_bf_dec-0.0.1b2-cp312-cp312-manylinux_2_34_x86_64.whl", hash = "sha256:2422f14f7530296107cb8ac92bdd320adb197726eb9fe6580e13d8f9f16d479c"},
+    {file = "lm_deezer_bf_dec-0.0.1b2.tar.gz", hash = "sha256:30081bd2d81a4921e0d00bd2284f7bb21088e0f7542af5310c0a09247788281f"},
 ]
 
 [[package]]
@@ -527,6 +544,23 @@ files = [
 plugins = ["importlib-metadata"]
 
 [[package]]
+name = "pyjwt"
+version = "2.8.0"
+description = "JSON Web Token implementation in Python"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "PyJWT-2.8.0-py3-none-any.whl", hash = "sha256:59127c392cc44c2da5bb3192169a91f429924e17aff6534d70fdc02ab3e04320"},
+    {file = "PyJWT-2.8.0.tar.gz", hash = "sha256:57e28d156e3d5c10088e0c68abb90bfac3df82b40a71bd0daa20c65ccd5c23de"},
+]
+
+[package.extras]
+crypto = ["cryptography (>=3.4.0)"]
+dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.4.0)", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
+docs = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
+tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
+
+[[package]]
 name = "requests"
 version = "2.31.0"
 description = "Python HTTP for Humans."
@@ -723,4 +757,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<4.0"
-content-hash = "7769daa7d0823a85a9b5c2a2c348afa879d74867d08ed154a51e761eae802683"
+content-hash = "f8137439bb259ab99cbb0562092182c794297d49c9dea809f95bb76000be45d2"
