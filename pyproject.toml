@@ -1,0 +1,28 @@
+[tool.poetry]
+name = 'lm-dw-deezer'
+version = '0.0.1b0'
+description = 'Liberum Melodian Library for making easy tracks downloading from Deezer'
+authors = ['An0nimia <an0nimia@protonmail.com>']
+license = 'CC BY 4.0'
+readme = 'README.md'
+
+[tool.poetry.dependencies]
+python = '>=3.12,<4.0'
+requests = '2.31.0'
+pydantic = '2.4.1'
+pycryptodomex = '3.19.0'
+mutagen = '1.47.0'
+tqdm = '4.66.1'
+typer = {version = '0.9.0', extras = ['all']}
+inquirerpy = '0.3.4'
+zstandard = '0.22.0'
+lm-deezer-bf-dec = {version = "^0.0.1b0", extras = ["RUST"]}
+
+
+[build-system]
+requires = ['poetry-core']
+build-backend = 'poetry.core.masonry.api'
+
+
+[tool.poetry.scripts]
+lm_deezer_dw = 'lm_dw_deezer.exes.cli:main'
