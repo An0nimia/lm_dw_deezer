@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   release-build:
+    name: Create build
     runs-on: ubuntu-latest
 
     steps:
@@ -27,7 +28,7 @@ jobs:
           pip install poetry
           poetry build
 
-      - name: upload windows dists
+      - name: upload dists
         uses: actions/upload-artifact@v3
         with:
           name: release-dists
