@@ -48,40 +48,6 @@ from .dw_helpers import (
 )
 
 
-__DEFAULT_MAX_X_MEDIA = 250
-
-
-def get_medias(
-	license_token: str,
-	conf: CONF,
-	tracks_token: list[str],
-	t_tracks: int
-) -> Medias:
-
-	if t_tracks < __DEFAULT_MAX_X_MEDIA:
-		i = t_tracks
-	else:
-		i = __DEFAULT_MAX_X_MEDIA
-
-	medias = API_Media.get_medias(
-		license_token = license_token,
-		media_formats = [conf.MEDIA_FORMATS] * i,
-		track_tokens = tracks_token[:i]
-	)
-
-	if t_tracks > __DEFAULT_MAX_X_MEDIA:
-		for a in range(__DEFAULT_MAX_X_MEDIA, t_tracks, __DEFAULT_MAX_X_MEDIA):
-			c_tracks_token = tracks_token[a:a + __DEFAULT_MAX_X_MEDIA]
-
-			medias.medias += API_Media.get_medias(
-				license_token = license_token,
-				media_formats = [conf.MEDIA_FORMATS] * len(c_tracks_token),
-				track_tokens = c_tracks_token
-			).medias
-
-	return medias
-
-
 def get_pbar(medias: Medias, tracks: list[Track]):
 	p_bar = tqdm(
 		zip(
