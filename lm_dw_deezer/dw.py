@@ -16,7 +16,7 @@ from .utils import (
 )
 
 from .dw_utils import (
-	dw_album_seq, dw_album_thread, get_medias,
+	dw_album_seq, dw_album_thread,
 	dw_playlist_seq, dw_playlist_thread, get_be_dw
 )
 
@@ -143,11 +143,10 @@ class DW(API_PIPE):
 
 			tracks_token.append(track_token)
 
-		medias = get_medias(
+		medias = API_Media.get_medias(
 			license_token = self.license_token,
-			conf = conf,
-			tracks_token = tracks_token,
-			t_tracks = pipe_info.tracks_count
+			media_formats = [conf.MEDIA_FORMATS] * pipe_info.tracks_count,
+			track_tokens = tracks_token
 		)
 
 		LOG.info('GOT track sources')
@@ -207,11 +206,10 @@ class DW(API_PIPE):
 
 			tracks_token.append(track_token)
 
-		medias = get_medias(
+		medias = API_Media.get_medias(
 			license_token = self.license_token,
-			conf = conf,
-			tracks_token = tracks_token,
-			t_tracks = pipe_info.estimated_tracks_count
+			media_formats = [conf.MEDIA_FORMATS] * pipe_info.estimated_tracks_count,
+			track_tokens = tracks_token
 		)
 
 		tracks = merge_track_data(pipe_info.tracks, playlist_data.tracks)		

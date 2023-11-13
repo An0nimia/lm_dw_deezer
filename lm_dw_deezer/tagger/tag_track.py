@@ -33,9 +33,8 @@ def tagger_track(
 			gw_track_info = gw_info,
 			pipe_track_info = pipe_info,
 			pipe_album_info = pipe_info_album,
-			path = out.path,
+			out = out,
 			image_bytes = image_bytes,
-			type_media = out.media_format
 		)
 
 		LOG.info(f'Successful downloaded \'{gw_info.title}\' at \'{out.path}\'')
@@ -47,17 +46,16 @@ def tag(
 	gw_track_info: GW_Track,
 	pipe_track_info: PIPE_Track,
 	pipe_album_info: PIPE_Album,
-	path: str,
+	out: Track_Out,
 	image_bytes: bytes,
-	type_media: str
 ) -> None:
 
 	tagger = TAG_MP3
 
-	if type_media == 'flac':
+	if out.quality == 'FLAC':
 		tagger = TAG_FLAC
 
-	with tagger(path) as tagger:
+	with tagger(out.path) as tagger:
 		tagger.add_image(image_bytes)
 		tagger.add_comment()
 
@@ -66,7 +64,7 @@ def tag(
 				generate_rgain(gw_track_info.gain)
 			)
 
-		if type_media != 'flac':
+		if out.quality == 'FLAC':
 			tagger.add_audio_length(-gw_track_info.duration)
 
 		lyrics = pipe_track_info.lyrics
