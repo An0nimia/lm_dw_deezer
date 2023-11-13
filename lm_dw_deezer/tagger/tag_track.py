@@ -1,5 +1,8 @@
 
-from api_deezer_full.gw.types import Track as GW_Track
+from api_deezer_full.gw.types.track import (
+	Track as GW_Track,
+	DEFAULT_DATE
+)
 
 from ..logger import LOG
 
@@ -13,7 +16,7 @@ from ..types.pipe_ext import (
 from .tag_mp3 import TAG_MP3
 from .tag_flac import TAG_FLAC
 from .helpers import generate_rgain
-from .utils import DEFAULT_PHYSICAL_RELEASE_DATE
+
 
 def tagger_track(
 	gw_info: GW_Track,
@@ -88,10 +91,12 @@ def tag(
 		tagger.add_contributors(gw_track_info.contributors)
 		tagger.add_composers(gw_track_info.contributors)
 
-		if gw_track_info.physical_release_date != DEFAULT_PHYSICAL_RELEASE_DATE: # Track from playlist doesn't have this JSON in their field
+		if gw_track_info.physical_release_date != DEFAULT_DATE: # Track from playlist doesn't have this JSON in their field
 			tagger.add_date_original_release(gw_track_info.physical_release_date)
 
-		tagger.add_date_release(gw_track_info.digital_release_date)
+		if gw_track_info.digital_release_date != DEFAULT_DATE:
+			tagger.add_date_release(gw_track_info.digital_release_date)
+
 		tagger.add_encoder()
 		tagger.add_title(gw_track_info.title)
 		tagger.add_isrc(gw_track_info.ISRC)
