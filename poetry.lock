@@ -257,13 +257,28 @@ docs = ["Sphinx (>=4.1.2,<5.0.0)", "furo (>=2021.8.17-beta.43,<2022.0.0)", "myst
 
 [[package]]
 name = "lm-deezer-bf-dec"
-version = "0.0.1b2"
+version = "0.0.1b3"
 description = "A simple RUST package with scope to speed up the blowfish decryption process for deezer tracks."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "lm_deezer_bf_dec-0.0.1b2-cp312-cp312-manylinux_2_34_x86_64.whl", hash = "sha256:2422f14f7530296107cb8ac92bdd320adb197726eb9fe6580e13d8f9f16d479c"},
-    {file = "lm_deezer_bf_dec-0.0.1b2.tar.gz", hash = "sha256:30081bd2d81a4921e0d00bd2284f7bb21088e0f7542af5310c0a09247788281f"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp310-cp310-macosx_10_7_x86_64.whl", hash = "sha256:7130b9282eb0e6b7b3f7f3c202bb8ad1f31907ce47fb1490db72bac91608c120"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:e74bba3b3c5ff16687125f38eb660c9c2e017d396e8b16c7d8327b895649c2f9"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp310-none-win32.whl", hash = "sha256:a879de14582f219ca8240fc58a4b8084cd3409f12cd9f160388acb1afc2dcc92"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp310-none-win_amd64.whl", hash = "sha256:8fba27255bd6597004d2316e4962716416bad8fe7211dba4437f2735a8378c7f"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp311-cp311-macosx_10_7_x86_64.whl", hash = "sha256:3db263493e010468b16e848a0cb38d683f98ee9643e21c4c9bef0cdd2b262c72"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:3147b4ec78166c241ebf49cf786de4c5b693b8e5387c696fd6714b471598f69a"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp311-none-win32.whl", hash = "sha256:d18e03de386b5b7911cc4eaaf06107b754dbe237bf8847c44b5b84f4fc92762c"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp311-none-win_amd64.whl", hash = "sha256:aa784dcebc1d0a8767712951902871c65c4db0b9473c945d7fd4fad857330d77"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp312-cp312-macosx_10_7_x86_64.whl", hash = "sha256:ba9aa42928754dca92fb272547c62b903d6716e8596fe2b356e12e8e89cc2d19"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:30e85434253368ade86f3971c75c61deb05f5e4dc9564a16ef49a077e86e4a1a"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp312-none-win32.whl", hash = "sha256:9d14c68b79530b22ed936d40a89d802737e602f4b99bda13b86d7ae7edcc3225"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp312-none-win_amd64.whl", hash = "sha256:c450153ffbf4006b79d0fdf9cbc8ce507f5d941ce05b11639f5dd4555bc6ea8b"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp38-none-win32.whl", hash = "sha256:e58f72424d566dbf34c5091510675a2bc08b73309ca21e892bd511a8172fac7b"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp38-none-win_amd64.whl", hash = "sha256:c2027d1b030959e0458feed327b6cd2775085de4f19f30edb7932fcb2b0cd43a"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp39-none-win32.whl", hash = "sha256:d13d4531fca9ef92fa3031fb9a7fade11d0c29623fecb850fe283b724384e980"},
+    {file = "lm_deezer_bf_dec-0.0.1b3-cp39-none-win_amd64.whl", hash = "sha256:1fec0f5325ff3af0a992fdd4497b73c6bd8b2b5d1c933dca60300af1fb7dfbbf"},
+    {file = "lm_deezer_bf_dec-0.0.1b3.tar.gz", hash = "sha256:dd3a7cfe3004b6f97d13329aa234e91a75dab15d6b9c75fbc01553e22ad918b7"},
 ]
 
 [[package]]
@@ -757,4 +772,4 @@ cffi = ["cffi (>=1.11)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<4.0"
-content-hash = "f8137439bb259ab99cbb0562092182c794297d49c9dea809f95bb76000be45d2"
+content-hash = "8fe105748f906dbfeb3fea46fe734959683ff46b32c7b4375ec17ad3fe9fdb24"
