@@ -13,13 +13,13 @@ files = [
 
 [[package]]
 name = "api-deezer-full"
-version = "0.0.1b0"
+version = "0.0.1b3"
 description = "Wrapper for all 'hidden' deezer APIs"
 optional = false
 python-versions = ">=3.12,<4.0"
 files = [
-    {file = "api_deezer_full-0.0.1b0-py3-none-any.whl", hash = "sha256:300fdd08a3d39dd17137bbbe8e31240a1d162082740f98f7f8d7d7b60bb990fe"},
-    {file = "api_deezer_full-0.0.1b0.tar.gz", hash = "sha256:06d7704ff35c99a0626b39918a29ef6dfae5b564da37b4939fe51249f9530e54"},
+    {file = "api_deezer_full-0.0.1b3-py3-none-any.whl", hash = "sha256:0eeb9ec22328d1187f88468f82d6eb370373692167fd3bdbca57914a104ee820"},
+    {file = "api_deezer_full-0.0.1b3.tar.gz", hash = "sha256:09253369eee435c4df3f4066694ed5fcecaebcec48f94c5f7b33fea6fe07c1d8"},
 ]
 
 [package.dependencies]
@@ -259,7 +259,7 @@ docs = ["Sphinx (>=4.1.2,<5.0.0)", "furo (>=2021.8.17-beta.43,<2022.0.0)", "myst
 name = "lm-deezer-bf-dec"
 version = "0.0.1b3"
 description = "A simple RUST package with scope to speed up the blowfish decryption process for deezer tracks."
-optional = false
+optional = true
 python-versions = ">=3.8"
 files = [
     {file = "lm_deezer_bf_dec-0.0.1b3-cp310-cp310-macosx_10_7_x86_64.whl", hash = "sha256:7130b9282eb0e6b7b3f7f3c202bb8ad1f31907ce47fb1490db72bac91608c120"},
@@ -343,13 +343,13 @@ docs = ["Sphinx (>=4.1.2,<5.0.0)", "furo (>=2021.8.17-beta.43,<2022.0.0)", "myst
 
 [[package]]
 name = "prompt-toolkit"
-version = "3.0.39"
+version = "3.0.41"
 description = "Library for building powerful interactive command lines in Python"
 optional = false
 python-versions = ">=3.7.0"
 files = [
-    {file = "prompt_toolkit-3.0.39-py3-none-any.whl", hash = "sha256:9dffbe1d8acf91e3de75f3b544e4842382fc06c6babe903ac9acb74dc6e08d88"},
-    {file = "prompt_toolkit-3.0.39.tar.gz", hash = "sha256:04505ade687dc26dc4284b1ad19a83be2f2afe83e7a828ace0c72f3a1df72aac"},
+    {file = "prompt_toolkit-3.0.41-py3-none-any.whl", hash = "sha256:f36fe301fafb7470e86aaf90f036eef600a3210be4decf461a5b1ca8403d3cb2"},
+    {file = "prompt_toolkit-3.0.41.tar.gz", hash = "sha256:941367d97fc815548822aa26c2a269fdc4eb21e9ec05fc5d447cf09bad5d75f0"},
 ]
 
 [package.dependencies]
@@ -682,30 +682,29 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "2.0.7"
+version = "2.1.0"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "urllib3-2.0.7-py3-none-any.whl", hash = "sha256:fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e"},
-    {file = "urllib3-2.0.7.tar.gz", hash = "sha256:c97dfde1f7bd43a71c8d2a58e369e9b2bf692d1334ea9f9cae55add7d0dd0f84"},
+    {file = "urllib3-2.1.0-py3-none-any.whl", hash = "sha256:55901e917a5896a349ff771be919f8bd99aff50b79fe58fec595eb37bbc56bb3"},
+    {file = "urllib3-2.1.0.tar.gz", hash = "sha256:df7aa8afb0148fa78488e7899b2c59b5f4ffcfa82e6c54ccb9dd37c1d7b52d54"},
 ]
 
 [package.extras]
 brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
-secure = ["certifi", "cryptography (>=1.9)", "idna (>=2.0.0)", "pyopenssl (>=17.1.0)", "urllib3-secure-extra"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "wcwidth"
-version = "0.2.9"
+version = "0.2.10"
 description = "Measures the displayed width of unicode strings in a terminal"
 optional = false
 python-versions = "*"
 files = [
-    {file = "wcwidth-0.2.9-py2.py3-none-any.whl", hash = "sha256:9a929bd8380f6cd9571a968a9c8f4353ca58d7cd812a4822bba831f8d685b223"},
-    {file = "wcwidth-0.2.9.tar.gz", hash = "sha256:a675d1a4a2d24ef67096a04b85b02deeecd8e226f57b5e3a72dbb9ed99d27da8"},
+    {file = "wcwidth-0.2.10-py2.py3-none-any.whl", hash = "sha256:aec5179002dd0f0d40c456026e74a729661c9d468e1ed64405e3a6c2176ca36f"},
+    {file = "wcwidth-0.2.10.tar.gz", hash = "sha256:390c7454101092a6a5e43baad8f83de615463af459201709556b6e4b1c861f97"},
 ]
 
 [[package]]
@@ -769,7 +768,10 @@ cffi = {version = ">=1.11", markers = "platform_python_implementation == \"PyPy\
 [package.extras]
 cffi = ["cffi (>=1.11)"]
 
+[extras]
+rustdw = ["lm-deezer-bf-dec"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.12,<4.0"
-content-hash = "8fe105748f906dbfeb3fea46fe734959683ff46b32c7b4375ec17ad3fe9fdb24"
+content-hash = "9d1e1d9cff70da12070e9f048784f0dcbade42de2f740eb130caeb67fd03bab4"

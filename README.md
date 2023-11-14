@@ -13,7 +13,7 @@
 	```
 	- Install
 		```bash
-		pip install lm-dw-deezer[RUST]
+		pip install lm-dw-deezer[RUSTDW]
 		```
 
 # Usage
