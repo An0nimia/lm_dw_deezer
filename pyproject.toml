@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lm-dw-deezer"
-version = "0.0.1b5"
+version = "0.0.1b51"
 description = "Liberum Melodian Library for making easy tracks downloading from Deezer"
 authors = ["An0nimia <an0nimia@protonmail.com>"]
 license = "CC BY 4.0"
@@ -32,4 +32,4 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.poetry.scripts]
-lm_deezer_dw = "lm_dw_deezer.exes.cli:main"
+lm_dw_deezer = "lm_dw_deezer.exes.cli:main"
