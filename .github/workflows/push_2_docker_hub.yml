@@ -25,7 +25,8 @@ jobs:
       - name: Get version from pyproject.toml
         id: getversion
         run: |
-          echo "VERSION=$(grep 'version =' pyproject.toml | awk -F\" '{print $1}')" >> $GITHUB_ENV
+          pip install toml
+          echo "VERSION=$(python -c 'import toml; print(toml.load(open("pyproject.toml"))["tool"]["poetry"]["version"])')" >> $GITHUB_ENV
 
       - name: Set DOCKER_TAG_VERSION
         run: echo "DOCKER_TAG_VERSION=${{ env.DOCKER_TAG }}:${{ env.VERSION }}" >> $GITHUB_ENV
