@@ -176,3 +176,6 @@ Cargo.lock
 *.pdb
 
 test_deezer_pipe.py
+
+Songs/
+out.json

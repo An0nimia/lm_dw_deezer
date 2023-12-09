@@ -1,13 +1,17 @@
 from typing import Annotated
+
 from datetime import datetime
 
 from pydantic import (
-	BaseModel, BeforeValidator, Field
+	BaseModel, BeforeValidator, Field,
+	field_validator
 )
 
-from api_deezer_full.pipe.types import Cover
+from api_deezer_full.gw.types.track import DEFAULT_DATE
 
-from api_deezer_full.pipe.types import Disk_Info
+from api_deezer_full.pipe.types import (
+	Cover, Disk_Info
+)
 
 from .track import Track
 
@@ -15,6 +19,14 @@ from .track import Track
 class Playlist_Track(Track):
 	disk_info: Disk_Info = Field(validation_alias = 'diskInfo')
 	release_date: datetime = Field(validation_alias = 'releaseDate')
+
+	@field_validator('release_date', mode = 'before')
+	@classmethod
+	def check_release_date(cls, release_date: str | None) -> str:
+		if not release_date is None:
+			return release_date
+
+		return DEFAULT_DATE
 
 
 type _Playlist_Track = Annotated[
