@@ -18,7 +18,7 @@
 
 # Usage
 ```bash
-lm_deezer_dw --help
+lm_dw_deezer --help
 ```
 
 
