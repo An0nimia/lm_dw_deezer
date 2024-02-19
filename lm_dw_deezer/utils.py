@@ -5,19 +5,19 @@ from api_deezer_full.gw.types.track import (
 )
 
 
-from .config.data_utils import COMPRESSION
+from .config.enums import COMPRESSION
 
 
 from .types.aliases import (
-	ITracks_Out, DW_Tracks
+	DW_Album, DW_Playlist
 )
 
 from .types.pipe_ext import (
 	Playlist_Tracks, Playlist_Track,
 )
 
-from .zippers import (
-	zipper, gzipper, zstdipper
+from .compressions import (
+	zip_compress, gzip_compress, zstd_compress
 )
 
 
@@ -64,15 +64,15 @@ def merge_track_data(
 def make_archive(
 	type_arc: COMPRESSION,
 	dir_name: str,
-	dw_tracks: ITracks_Out | DW_Tracks
+	dw_tracks: DW_Album | DW_Playlist
 ) -> str:
 
 	match type_arc:
 		case COMPRESSION.ZIP:
-			func = zipper
+			func = zip_compress
 		case COMPRESSION.GZIP:
-			func = gzipper
+			func = gzip_compress
 		case COMPRESSION.ZSTD:
-			func = zstdipper
+			func = zstd_compress
 
 	return func(dir_name, dw_tracks)

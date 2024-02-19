@@ -24,9 +24,11 @@ def artists_2_str(artists: Artists):
 
 
 def __excape_unwanted(fn: str) -> str:
+	# https://www.unicode.org/Public/security/latest/confusables.txt
+
 	fn = (
 		fn
-		.replace('/', '᜵') # https://www.unicode.org/Public/security/latest/confusables.txt
+		.replace('/', '᜵')
 		.replace('?', 'ʔ')
 		.replace('#', '')
 		.replace('%', '٪')
@@ -69,7 +71,7 @@ def get_fn(
 
 
 def create_dir_w_track(conf: CONF, track: Track) -> str:
-	dir_name = get_fn(track, conf.FOLDER_TEMPLATE, '')
+	dir_name = get_fn(track, conf.FOLDER_FORMAT, '')
 	dir_name = f'{conf.OUTPUT_FOLDER}/{dir_name}'
 	makedirs(dir_name, exist_ok = True)
 

@@ -3,15 +3,15 @@ from pathlib import Path
 from tarfile import open as TAR
 
 from ..types.aliases import (
-	ITracks_Out, DW_Tracks
+	DW_Album, DW_Playlist
 )
 
 from .utils import make_archive
 
 
-def gzipper(
+def gzip_compress(
 	dir_name: str,
-	dw_tracks: ITracks_Out | DW_Tracks
+	dw_tracks: DW_Album | DW_Playlist
 ) -> str:
 
 	gz_name = Path(dir_name).name
