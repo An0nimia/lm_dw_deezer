@@ -1,10 +1,10 @@
-from ..config.data_utils import BE_DW
+from ..config.enums import DECRYPTOR
 
 
 class No_BE(Exception):
 	def __init__(
 		self,
-		kind: BE_DW,
+		kind: DECRYPTOR,
 		msg: str = 'Sorry not found necessary dependencies for using \'{}\' backend'
 	) -> None:
 

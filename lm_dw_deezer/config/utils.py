@@ -1,9 +1,14 @@
-from .data_utils import (
-	DEFAULT_FILE_FORMATS, DEFAULT_FOLDER_FORMATS, QUALITS
-)
+from .enums import QUALITY
 
 
-def create_media_json(media_formats: list[QUALITS]):
+supported_fields_4_file: list[str] = [
+	'title', 'artist', 'ISRC',
+	'QUALITY', 'artists', 'album',
+	'n_track', 'n_disk'
+]
+
+
+def create_media_json(media_formats: list[QUALITY]):
 	media_json = {
 		'type': 'FULL',
 		'formats': [
@@ -23,9 +28,5 @@ def __possible_save_formats(formats: list[str]) -> None:
 		print(f'{a}): {f_format}')
 
 
-def possible_fn_save_formats() -> None:
-	__possible_save_formats(DEFAULT_FILE_FORMATS)
-
-
-def possible_dirs_save_formats() -> None:
-	__possible_save_formats(DEFAULT_FOLDER_FORMATS)
+def possible_keyword_4_save_formats() -> None:
+	__possible_save_formats(supported_fields_4_file)

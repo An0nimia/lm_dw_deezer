@@ -1,5 +1,3 @@
-from typing import cast
-
 from pathlib import Path
 
 from zipfile import (
@@ -7,25 +5,26 @@ from zipfile import (
 )
 
 from ..types.aliases import (
-	ITracks_Out, DW_Tracks, DW_Track
+	DW_Tracks, ITracks_Out,
+	DW_Album, DW_Playlist
 )
 
 
 def __make_archive(
-	dw_tracks: DW_Tracks | ITracks_Out,
+	dw_tracks: DW_Album | DW_Playlist,
 	zip_file: ZipFile,
 	archive_name: str
 ) -> None:
 
-	if type(dw_tracks[0]) is DW_Track:
-		__4_DW_Track(
-			dw_tracks = cast(DW_Tracks, dw_tracks),
+	if type(dw_tracks) is DW_Album:
+		__4_ITrack_out(
+			dw_tracks = dw_tracks.dw_tracks,
 			zip_file = zip_file,
 			archive_name = archive_name
 		)
-	else:
-		__4_ITrack_out(
-			dw_tracks = cast(ITracks_Out, dw_tracks),
+	elif type(dw_tracks) is DW_Playlist:
+		__4_DW_Track(
+			dw_tracks = dw_tracks.dw_tracks,
 			zip_file = zip_file,
 			archive_name = archive_name
 		)
@@ -41,9 +40,11 @@ def __4_DW_Track(
 		if dw_track.dw_track is None:
 			continue
 
+		arc_name = f'{Path(dw_track.dw_track.path).name}'
+
 		zip_file.write(
 			filename = dw_track.dw_track.path,
-			arcname = f'{archive_name}/{Path(dw_track.dw_track.path).name}'
+			arcname = f'{archive_name}/{arc_name}'
 		)
 
 
@@ -57,15 +58,17 @@ def __4_ITrack_out(
 		if dw_track is None:
 			continue
 
+		arc_name = f'{Path(dw_track.path).name}'
+
 		zip_file.write(
 			filename = dw_track.path,
-			arcname = f'{archive_name}/{Path(dw_track.path).name}'
+			arcname = f'{archive_name}/{arc_name}'
 		)
 
 
-def zipper(
+def zip_compress(
 	dir_name: str,
-	dw_tracks: ITracks_Out | DW_Tracks
+	dw_tracks: DW_Album | DW_Playlist
 ) -> str:
 
 	zip_name = Path(dir_name).name

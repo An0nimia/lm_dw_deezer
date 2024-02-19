@@ -14,8 +14,9 @@ from ..config import (
 	CONF, Thread_Func
 )
 
-from ..config.data_utils import (
-	QUALITS, COMPRESSION, BE_DW
+from ..config.enums import (
+	QUALITY, COMPRESSION,
+	DECRYPTOR, FILE_FORMAT, FOLDER_FORMAT
 )
 
 from ..generators import (
@@ -47,7 +48,7 @@ def trk(
 	],
 
 	quality: Annotated[
-		list[QUALITS], Option(
+		list[QUALITY], Option(
 			case_sensitive = False,
 			help = 'Choose download quality (Can specify multiple if you prefer a quality order)',
 		)
@@ -65,18 +66,50 @@ def trk(
 		)
 	] = default_conf.RE_DOWNLOAD,
 
+	file_format: Annotated[
+		FILE_FORMAT, Option(
+			help = 'File format for customize output filename'
+		)
+	] = FILE_FORMAT.TITLE_ARTISTS_ISRC_QUALITY,
+
+	c_file_format: Annotated[
+		Optional[str], Option(
+			help = 'File format for customize output filename, see the available params in \'file_format\' option'
+		)
+	] = None,
+
+	folder_format: Annotated[
+		FOLDER_FORMAT, Option(
+			help = 'Folder format for customize output folder name'
+		)
+	] = FOLDER_FORMAT.ALBUM_ARTISTS,
+
+	c_folder_format: Annotated[
+		Optional[str], Option(
+			help = 'Folder format for customize output folder name, see the available params in \'folder_format\' option'
+		)
+	] = None,
+
 	be_dw: Annotated[
-		BE_DW, Option(
+		DECRYPTOR, Option(
 			help = 'Backed for downloading'
 		)
-	] = BE_DW.C
+	] = DECRYPTOR.C
 ):
+
+	if not c_file_format is None:
+		file_format = c_file_format #pyright: ignore [reportAssignmentType]
+
+	if not c_folder_format is None:
+		folder_format = c_folder_format #pyright: ignore [reportAssignmentType]
 
 	conf = CONF(
 		QUALITIES = quality,
 		OUTPUT_FOLDER = out_dir,
 		RE_DOWNLOAD = re_download,
-		BACKEND_DW = be_dw
+		DECRYPTOR = be_dw,
+		FILE_FORMAT = file_format,
+		FOLDER_FORMAT = folder_format
 	)
 
 	try:
@@ -97,7 +130,7 @@ def alb(
 	],
 
 	quality: Annotated[
-		list[QUALITS], Option(
+		list[QUALITY], Option(
 			help = 'Choose download quality (Can specify multiple if you prefer a quality order)',
 		)
 	] = default_conf.QUALITIES,
@@ -133,18 +166,50 @@ def alb(
 		)
 	] = None,
 
+	file_format: Annotated[
+		FILE_FORMAT, Option(
+			help = 'File format for customize output filename'
+		)
+	] = FILE_FORMAT.TITLE_ARTISTS_ISRC_QUALITY,
+
+	c_file_format: Annotated[
+		Optional[str], Option(
+			help = 'File format for customize output filename, see the available params in \'file_format\' option'
+		)
+	] = None,
+
+	folder_format: Annotated[
+		FOLDER_FORMAT, Option(
+			help = 'Folder format for customize output folder name'
+		)
+	] = FOLDER_FORMAT.ALBUM_ARTISTS,
+
+	c_folder_format: Annotated[
+		Optional[str], Option(
+			help = 'Folder format for customize output folder name, see the available params in \'folder_format\' option'
+		)
+	] = None,
+
 	be_dw: Annotated[
-		BE_DW, Option(
+		DECRYPTOR, Option(
 			help = 'Backed for downloading'
 		)
-	] = BE_DW.C
+	] = DECRYPTOR.C
 ):
+	if not c_file_format is None:
+		file_format = c_file_format #pyright: ignore [reportAssignmentType]
+
+	if not c_folder_format is None:
+		folder_format = c_folder_format #pyright: ignore [reportAssignmentType]
+
 	conf = CONF(
 		QUALITIES = quality,
 		OUTPUT_FOLDER = out_dir,
 		RE_DOWNLOAD = re_download,
 		ARCHIVE = archive,
-		BACKEND_DW = be_dw
+		DECRYPTOR = be_dw,
+		FILE_FORMAT = file_format,
+		FOLDER_FORMAT = folder_format
 	)
 
 	if fast:
@@ -166,7 +231,7 @@ def ply(
 	],
 
 	quality: Annotated[
-		list[QUALITS], Option(
+		list[QUALITY], Option(
 			help = 'Choose download quality (Can specify multiple if you prefer a quality order)',
 		)
 	] = default_conf.QUALITIES,
@@ -202,18 +267,50 @@ def ply(
 		)
 	] = None,
 
+	file_format: Annotated[
+		FILE_FORMAT, Option(
+			help = 'File format for customize output filename'
+		)
+	] = FILE_FORMAT.TITLE_ARTISTS_ISRC_QUALITY,
+
+	c_file_format: Annotated[
+		Optional[str], Option(
+			help = 'File format for customize output filename, see the available params in \'file_format\' option'
+		)
+	] = None,
+
+	folder_format: Annotated[
+		FOLDER_FORMAT, Option(
+			help = 'Folder format for customize output folder name'
+		)
+	] = FOLDER_FORMAT.ALBUM_ARTISTS,
+
+	c_folder_format: Annotated[
+		Optional[str], Option(
+			help = 'Folder format for customize output folder name, see the available params in \'folder_format\' option'
+		)
+	] = None,
+
 	be_dw: Annotated[
-		BE_DW, Option(
+		DECRYPTOR, Option(
 			help = 'Backed for downloading'
 		)
-	] = BE_DW.C
-):
+	] = DECRYPTOR.C
+):	
+	if not c_file_format is None:
+		file_format = c_file_format #pyright: ignore [reportAssignmentType]
+
+	if not c_folder_format is None:
+		folder_format = c_folder_format #pyright: ignore [reportAssignmentType]
+
 	conf = CONF(
 		QUALITIES = quality,
 		OUTPUT_FOLDER = out_dir,
 		RE_DOWNLOAD = re_download,
 		ARCHIVE = archive,
-		BACKEND_DW = be_dw,
+		DECRYPTOR = be_dw,
+		FILE_FORMAT = file_format,
+		FOLDER_FORMAT = folder_format
 	)
 
 	if fast:

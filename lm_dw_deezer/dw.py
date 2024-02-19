@@ -85,7 +85,7 @@ class DW(API_PIPE):
 
 		dw_media = media_infos.medias[0]
 		dir_name = create_dir_w_track(conf, gw_info)
-		helper = get_be_dw(conf.BACKEND_DW)
+		helper = get_be_dw(conf.DECRYPTOR)
 
 		dw_track.dw_track = dw_helper(
 			id_track = dw_id_track,
@@ -172,7 +172,7 @@ class DW(API_PIPE):
 			album_info.zip_path = make_archive(
 				type_arc = conf.ARCHIVE,
 				dir_name = dir_name,
-				dw_tracks = album_info.dw_tracks
+				dw_tracks = album_info
 			)
 
 
@@ -238,5 +238,5 @@ class DW(API_PIPE):
 			playlist_info.zip_path = make_archive(
 				type_arc = conf.ARCHIVE,
 				dir_name = dir_name,
-				dw_tracks = playlist_info.dw_tracks
+				dw_tracks = playlist_info
 			)

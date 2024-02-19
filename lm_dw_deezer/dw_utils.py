@@ -2,7 +2,6 @@ from tqdm import tqdm
 
 from typing import cast
 
-from api_deezer_full import API_Media
 from api_deezer_full.media.types import Medias
 
 from importlib.util import find_spec
@@ -25,7 +24,7 @@ from .medjays import (
 	DW_Medjay, Event
 )
 
-from .config.data_utils import BE_DW
+from .config.enums import DECRYPTOR
 
 from .config import (
 	CONF, Thread_Func
@@ -69,14 +68,14 @@ def wait_threads(threads: list[DW_Medjay]) -> None:
 	threads.clear()
 
 
-def get_be_dw(backend_dw: BE_DW) -> F_BE_DW:
+def get_be_dw(backend_dw: DECRYPTOR) -> F_BE_DW:
 	match backend_dw:
-		case BE_DW.RUST:
+		case DECRYPTOR.RUST:
 			if decrypt_track_w_RUST is None:
-				raise No_BE(BE_DW.RUST)
+				raise No_BE(DECRYPTOR.RUST)
 
 			dw_helper = decrypt_track_w_RUST
-		case BE_DW.C:
+		case DECRYPTOR.C:
 			dw_helper = decrypt_track_w_C
 
 	return dw_helper
@@ -90,7 +89,7 @@ def dw_album_seq(
 ) -> G_Track_Out:
 
 	p_bar = get_pbar(medias, album_info.gw_tracks_info)
-	dw_helper = get_be_dw(conf.BACKEND_DW)
+	dw_helper = get_be_dw(conf.DECRYPTOR)
 
 	for (media, gw_track_info), pipe_track_info in zip(
 		p_bar, album_info.pipe_info.tracks
@@ -120,7 +119,7 @@ def dw_album_thread(
 	event = Event()
 	workers = thread_func.WORKERS
 	p_bar = get_pbar(medias, album_info.gw_tracks_info)
-	dw_helper = get_be_dw(conf.BACKEND_DW)
+	dw_helper = get_be_dw(conf.DECRYPTOR)
 
 	for (media, gw_track_info), pipe_track_info in zip(
 		p_bar, album_info.pipe_info.tracks
@@ -168,7 +167,7 @@ def dw_playlist_seq(
 ) -> G_DW_Track:
 
 	p_bar = get_pbar(medias, tracks)
-	dw_helper = get_be_dw(conf.BACKEND_DW)
+	dw_helper = get_be_dw(conf.DECRYPTOR)
 
 	for (media, gw_track_info), pipe_track_info in zip(
 		p_bar, pipe_info.tracks
@@ -200,7 +199,7 @@ def dw_playlist_thread(
 	workers = thread_func.WORKERS
 	event = Event()
 	p_bar = get_pbar(medias, tracks)
-	dw_helper = get_be_dw(conf.BACKEND_DW)
+	dw_helper = get_be_dw(conf.DECRYPTOR)
 
 	for (media, gw_track_info), pipe_track_info in zip(
 		p_bar, pipe_info.tracks

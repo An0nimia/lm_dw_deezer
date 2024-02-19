@@ -34,7 +34,7 @@ def dw_helper(
 		if media.format == 'FLAC':
 			media_format = 'flac'
 
-		fn = get_fn(track, conf.FILE_TEMPLATE, media.format)
+		fn = get_fn(track, conf.FILE_FORMAT, media.format)
 
 		path = f'{dir_name}/{fn}.{media_format}'
 
@@ -42,7 +42,7 @@ def dw_helper(
 			path = path,
 			media_format = media.media_type,
 			quality = media.format,
-			quality_w = conf.QUALITIES[0].value,
+			quality_w = conf.QUALITIES[0],
 		)
 
 		if isfile(dw_track.path) and not conf.RE_DOWNLOAD:
@@ -61,7 +61,7 @@ def dw_helper_legacy(
 	dir_name: str,
 	func_be_dw: F_BE_DW
 ) -> ITrack_Out:
-	fn = get_fn(track, conf.FILE_TEMPLATE, __LEGACY_MEDIA_QUALITY)
+	fn = get_fn(track, conf.FILE_FORMAT, __LEGACY_MEDIA_QUALITY)
 
 	path = f'{dir_name}/{fn}.{__LEGACY_MEDIA_FORMAT}'
 

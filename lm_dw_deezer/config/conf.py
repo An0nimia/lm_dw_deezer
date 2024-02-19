@@ -8,42 +8,37 @@ from .image import Image
 from .thread_func import Thread_Func
 from .utils import create_media_json
 
-from .data_utils import (
-	DEFAULT_FILE_FORMATS, QUALITS,
-	DEFAULT_FOLDER_FORMATS, COMPRESSION, BE_DW
+from .enums import (
+	QUALITY as E_QUALITY,
+	DECRYPTOR as E_DECRYPTOR,
+	COMPRESSION as E_COMPRESSION,
+	FILE_FORMAT as E_FILE_FORMAT,
+	FOLDER_FORMAT as E_FOLDER_FORMAT
 )
 
-
+# https://stackoverflow.com/questions/52063759/passing-default-list-argument-to-dataclasses
 @dataclass
 class CONF:
-	QUALITIES: list[QUALITS] = field(
-		default_factory = lambda: [
-			QUALITS.NICE, QUALITS.GOOD, QUALITS.OK
-		]
-	) # https://stackoverflow.com/questions/52063759/passing-default-list-argument-to-dataclasses
+	QUALITIES: list[E_QUALITY] = field(
+		default_factory = lambda: [quality for quality in E_QUALITY]
+	)
 
 	OUTPUT_FOLDER: str = 'Songs/'
 
-	FILE_FORMATS: list[str] = field(default_factory = lambda: DEFAULT_FILE_FORMATS)
-	FILE_FORMAT: int = -1
+	FILE_FORMAT: E_FILE_FORMAT | str = E_FILE_FORMAT.TITLE_ARTISTS_ISRC_QUALITY
 
-	FOLDER_FORMATS: list[str] = field(default_factory = lambda: DEFAULT_FOLDER_FORMATS)
-	FOLDER_FORMAT: int = 0
+	FOLDER_FORMAT: E_FOLDER_FORMAT | str = E_FOLDER_FORMAT.ALBUM_ARTISTS
 
 	LEGACY_DOWNLOAD_RECURSION: bool = True
 	RE_DOWNLOAD: bool = False
-	ARCHIVE: COMPRESSION | None = None
+	ARCHIVE: E_COMPRESSION | None = None
 
 	TRACKS_IMAGE: Image = field(default_factory = Image)
 	THREAD_FUNC: Thread_Func | None = None
-	BACKEND_DW: BE_DW = BE_DW.C
+	DECRYPTOR: E_DECRYPTOR = E_DECRYPTOR.C
 
 
 	def __post_init__(self):
 		makedirs(self.OUTPUT_FOLDER, exist_ok = True)
 
 		self.MEDIA_FORMATS = create_media_json(self.QUALITIES)
-
-		self.FILE_TEMPLATE = self.FILE_FORMATS[self.FILE_FORMAT]
-
-		self.FOLDER_TEMPLATE = self.FOLDER_FORMATS[self.FOLDER_FORMAT]

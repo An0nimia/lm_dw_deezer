@@ -7,23 +7,24 @@ from tarfile import open as TAR
 from zstandard import ZstdCompressor
 
 from ..types.aliases import (
-	ITracks_Out, DW_Tracks
+	DW_Album, DW_Playlist
 )
 
 from .utils import make_archive
 
 
-def zstdipper(
+def zstd_compress(
 	dir_name: str,
-	dw_tracks: DW_Tracks | ITracks_Out
+	dw_tracks: DW_Album | DW_Playlist
 ) -> str:
-	
+
 	zstd_name = Path(dir_name).name
 	path = f'{dir_name}/{zstd_name}.tar.zst'
 	cctx = ZstdCompressor()
 
 	# creating a TAR which the content is gonna stream to the ZSTD stream writer for compression data
 	# the zstd stream write is gonna to write to the physical file
+	# https://stackoverflow.com/questions/76681159/what-is-the-most-efficient-way-to-unpack-a-tar-zstd-download-in-python
 
 	with (
 		open(path, 'wb') as to_stream,
@@ -43,7 +44,7 @@ def zstdipper(
 # Would be better to create a proper Class to integrate with TarFile as this https://pyzstd.readthedocs.io/en/latest/#with-tarfile
 # ... But for some reasons my tar comes with 15 more mb, I do not why & I didn't got the time to figure out
 # CURRENTLY NOT USING. CTRL + SHIFT + 7 for un-comment seletected code
-# def old_zstdipper(
+# def old_zstd_compress(
 # 	dir_name: str,
 # 	dw_tracks: ITracks_Out | DW_Tracks
 # ) -> str:
