@@ -19,7 +19,12 @@ def read_firefox() -> str | None:
 	arl = None
 
 	for file in files:
-		db = connect(file.absolute())
+		c_file = str(file.absolute())
+
+		if (not 'firefox' in c_file) or ('crashrecovery' in c_file):
+			continue
+		
+		db = connect(c_file)
 		cursor = db.cursor()
 		query = 'SELECT value FROM moz_cookies WHERE name = \'arl\' and host = \'.deezer.com\''
 		cursor.execute(query)

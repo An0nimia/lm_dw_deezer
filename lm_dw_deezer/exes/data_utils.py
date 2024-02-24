@@ -1,6 +1,6 @@
-from pathlib import Path
-
 from os import makedirs
+
+from pathlib import Path
 
 from InquirerPy.base.control import Choice
 from InquirerPy.prompts.list import ListPrompt
@@ -17,17 +17,17 @@ file_conf = f'{working_dir}/{lm_dw_deezer_fn}'
 
 __browsers = ('firefox', 'manually')
 
+choices = [
+	Choice(
+		value = browser,
+		name = browser.capitalize()
+	)
+
+	for browser in __browsers
+]
+
 l_browsers = ListPrompt(
 	message = 'How you want to input your arl token:',
-	choices = [
-		Choice(
-			value = 'firefox',
-			name = 'Firefox'
-		),
-		Choice(
-			value = 'manually',
-			name = 'Manually'
-		),
-	],
+	choices = choices,
 	default = 'manually',
 )

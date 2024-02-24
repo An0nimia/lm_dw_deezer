@@ -1,3 +1,5 @@
+from sys import argv
+
 from typing import (
 	Annotated, Optional
 )
@@ -6,6 +8,7 @@ from typer import (
 	Typer, Argument, Option
 )
 
+from api_deezer_full.mobile import API_Mobile
 from api_deezer_full.media.exceptions import Insufficient_Rights
 
 from ..logger import LOG
@@ -24,19 +27,44 @@ from ..generators import (
 )
 
 from .utils import (
-	init_check, task
+	init_check, task, write_arl
 )
 
 
 app = Typer()
 default_conf = CONF()
-api_dw = init_check()
+
+if not argv[1] in ('set-arl', 'login'):
+	api_dw = init_check()
+
 LOG.disable_output()
 
 
 @app.command(name = 'set-arl', help = 'For setting deezer arl cookie')
 def set_arl() -> None:
 	init_check(override = True)
+	print('ARL is set')
+
+
+@app.command(name = 'login', help = 'For setting deezer arl cookie with username & password')
+def login(
+	email: Annotated[
+		str, Option(
+			prompt = True
+		)
+	],
+	password: Annotated[
+		str, Option(
+			prompt = True,
+			hide_input = True
+		)
+	]
+) -> None:
+
+	api_mobile = API_Mobile(email, password)
+	api_mobile.login()
+	write_arl(api_mobile.ARL)
+	print('Logged successfully =)')
 
 
 @app.command(name = 'trk', help = 'For downloading tracks')
@@ -114,7 +142,7 @@ def trk(
 
 	try:
 		Gen_Track(
-			api_dw.dw_track(link, conf)
+			api_dw.dw_track(link, conf) #pyright: ignore [reportPossiblyUnboundVariable]
 		).wait()
 	except Insufficient_Rights as err:
 		print(err.message)
@@ -218,7 +246,7 @@ def alb(
 			WORKERS = workers
 		)
 
-	album = Gen_Album(api_dw.dw_album(link, conf))
+	album = Gen_Album(api_dw.dw_album(link, conf)) #pyright: ignore [reportPossiblyUnboundVariable]
 	album.wait()
 
 
@@ -319,7 +347,7 @@ def ply(
 			func = task
 		)
 
-	playlist = Gen_Playlist(api_dw.dw_playlist(link, conf))
+	playlist = Gen_Playlist(api_dw.dw_playlist(link, conf)) #pyright: ignore [reportPossiblyUnboundVariable]
 	playlist.wait()
 
 

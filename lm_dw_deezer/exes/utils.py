@@ -27,7 +27,7 @@ from .read_browsers_cookies import (
 from ..dw import DW
 
 
-def __write_arl(arl: str):
+def write_arl(arl: str):
 	infos = {
 		'arl': arl
 	}
@@ -63,7 +63,7 @@ def check_arl(override: bool = False) -> str:
 	if arl is None:
 		arl = prompt('Please input your arl')
 
-	__write_arl(arl)
+	write_arl(arl)
 
 	return arl
 

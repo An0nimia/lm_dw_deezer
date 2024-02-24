@@ -13,8 +13,8 @@ from ..types.aliases import (
 	G_Track_Out, F_BE_DW
 )
 
-from .utils import check_fallback
 from .dws import dw_helper
+from .utils import check_fallback
 
 
 def helper_album(
