@@ -1,7 +1,8 @@
 from Cryptodome.Hash import MD5
-from Cryptodome.Cipher import AES
-from Cryptodome.Cipher import Blowfish
 
+from Cryptodome.Cipher import (
+	AES, Blowfish
+)
 
 # https://gitlab.com/RemixDev/deemix-py/-/blob/main/deemix/utils/crypto.py?ref_type=heads
 
