@@ -14,7 +14,6 @@ from ..types.aliases import (
 )
 
 from .dws import dw_helper
-from .utils import check_fallback
 
 
 def helper_album(
@@ -27,10 +26,7 @@ def helper_album(
 	func_be_dw: F_BE_DW
 ) -> G_Track_Out:
 
-	dw_id_track = check_fallback(gw_track_info)
-
 	track_out = dw_helper(
-		id_track = dw_id_track,
 		track = gw_track_info,
 		media = media,
 		conf = conf,

@@ -7,15 +7,6 @@ from api_deezer_full.gw.types import (
 from ..config import CONF
 
 
-def check_fallback(gw_track_info: Track):
-	dw_id_track = gw_track_info.id
-
-	if gw_track_info.fallback:
-		dw_id_track = gw_track_info.fallback.id
-
-	return dw_id_track
-
-
 def artists_2_str(artists: Artists):
 	return '│'.join(
 		artist.name
