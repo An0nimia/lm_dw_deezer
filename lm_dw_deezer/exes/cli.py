@@ -8,7 +8,7 @@ from typer import (
 	Typer, Argument, Option
 )
 
-from api_deezer_full.mobile import API_Mobile
+from api_deezer_full import API_Mobile
 from api_deezer_full.media.exceptions import Insufficient_Rights
 
 from ..logger import LOG

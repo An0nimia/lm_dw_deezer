@@ -70,11 +70,9 @@ class DW(API_PIPE):
 
 		yield dw_track
 
-		dw_id_track = gw_info.id
 		track_token = gw_info.track_token
 
 		if gw_info.fallback:
-			dw_id_track = gw_info.fallback.id
 			track_token = gw_info.fallback.track_token
 
 		media_infos = API_Media.get_medias(
@@ -88,7 +86,6 @@ class DW(API_PIPE):
 		helper = get_be_dw(conf.DECRYPTOR)
 
 		dw_track.dw_track = dw_helper(
-			id_track = dw_id_track,
 			track = gw_info,
 			media = dw_media,
 			conf = conf,

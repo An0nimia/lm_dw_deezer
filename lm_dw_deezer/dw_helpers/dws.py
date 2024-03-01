@@ -18,7 +18,6 @@ __LEGACY_MEDIA_QUALITY = 'MP3_128'
 
 
 def dw_helper(
-	id_track: str, # PASS 'id_track' apart in case of FALLBACK medias
 	track: Track,
 	media: Media,
 	conf: CONF,
@@ -48,14 +47,18 @@ def dw_helper(
 		if isfile(dw_track.path) and not conf.RE_DOWNLOAD:
 			return dw_track
 
+		id_track = track.fallback.id if track.fallback else track.id
+
 		func_be_dw(id_track, media.sources[0].url, dw_track.path)
+	else:
+		dw_track = dw_helper_legacy(
+			track, conf, dir_name, func_be_dw
+		)
 
 	return dw_track
 
 
 def dw_helper_legacy(
-	id_track: str, # PASS 'id_track' apart in case of FALLBACK medias
-	track_md5: str, # PASS 'track_md5' apart in case of FALLBACK medias
 	track: Track,
 	conf: CONF,
 	dir_name: str,
@@ -75,7 +78,16 @@ def dw_helper_legacy(
 	if isfile(dw_track.path) and not conf.RE_DOWNLOAD:
 		return dw_track
 
-	dw_url = gen_song_hash(track_md5, __LEGACY_MEDIA_QUALITY, id_track, track.media_version)
+	track_md5 = track.md5_origin
+	id_track = track.id
+	media_version = track.media_version
+
+	if track.fallback:
+		id_track = track.fallback.id
+		track_md5 = track.fallback.md5_origin
+		media_version = track.fallback.media_version
+
+	dw_url = gen_song_hash(track_md5, __LEGACY_MEDIA_QUALITY, id_track, media_version)
 	func_be_dw(id_track, dw_url, dw_track.path)
 
 	return dw_track
