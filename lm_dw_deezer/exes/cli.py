@@ -34,7 +34,7 @@ from .utils import (
 app = Typer()
 default_conf = CONF()
 
-if not argv[1] in ('set-arl', 'login'):
+if len(argv) != 1 and not argv[1] in ('set-arl', 'login'):
 	api_dw = init_check()
 
 LOG.disable_output()

@@ -11,6 +11,11 @@ __IV = b'\x00\x01\x02\x03\x04\x05\x06\x07'
 __SECRET_KEY = b'jo6aey6haid2Teih'
 __URL_MEDIA_TEMPLATE = 'https://e-cdns-proxy-{md5_0}.dzcdn.net/mobile/1/{media}'
 
+__FMTS_CODES = {
+	'MP3_128': '1',
+	'MP3_320': '3', # they are just here for legacy reason, only MP3_128 is gonna work
+	'FLAC': '9'
+}
 
 def __md5(data: str) -> str:
 	h = MD5.new()
@@ -32,7 +37,7 @@ def gen_song_hash(
 	data = b'\xa4'.join(
 		a.encode()
 		for a in [
-			md5, quality, id_track, media_version
+			md5, __FMTS_CODES[quality], id_track, media_version
 		]
 	)
 

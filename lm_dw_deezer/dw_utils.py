@@ -72,11 +72,11 @@ def get_be_dw(backend_dw: DECRYPTOR) -> F_BE_DW:
 			if decrypt_track_w_RUST is None:
 				raise No_BE(DECRYPTOR.RUST)
 
-			dw_helper = decrypt_track_w_RUST
+			be_dw = decrypt_track_w_RUST
 		case DECRYPTOR.C:
-			dw_helper = decrypt_track_w_C
+			be_dw = decrypt_track_w_C
 
-	return dw_helper
+	return be_dw
 
 
 def dw_album_seq(
