@@ -179,3 +179,5 @@ test_deezer_pipe.py
 
 Songs/
 out.json
+dw_alb.py
+dw_trk.py

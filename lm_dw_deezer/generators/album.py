@@ -1,10 +1,8 @@
 # https://stackoverflow.com/questions/34073370/best-way-to-receive-the-return-value-from-a-python-generator
 
-from typing import cast
-
 from ..types.aliases import (
-	G_Album, G_Track_Out, G_DW_Album,
-	ITrack_Out
+	G_Album, G_Track_Out, 
+	ITrack_Out, DW_Album
 )
 
 
@@ -15,21 +13,15 @@ class Gen_Album:
 
 
 	def __first(self) -> None:
-		# https://adamj.eu/tech/2021/07/06/python-type-hints-how-to-use-typing-cast/#the-simplest-cast
-
-		self.album = next(
-			cast(G_DW_Album, self.__gen)
-		)
+		self.album: DW_Album = next(self.__gen) #pyright: ignore [reportArgumentType]
 
 
 	def dw(self) -> ITrack_Out:
-		return next(
-			cast(G_Track_Out, self.__gen)
-		)
+		return next(self.__gen) #pyright: ignore [reportReturnType]
 
 
 	def __iter__(self) -> G_Track_Out:
-		yield from cast(G_Track_Out, self.__gen)
+		yield from self.__gen #pyright: ignore [reportReturnType]
 
 
 	def wait(self) -> None:

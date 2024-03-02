@@ -1,7 +1,5 @@
 from tqdm import tqdm
 
-from typing import cast
-
 from api_deezer_full.media.types import Medias
 
 from importlib.util import find_spec
@@ -114,7 +112,7 @@ def dw_album_thread(
 	dir_name: str,
 ) -> None:
 
-	thread_func: Thread_Func = cast(Thread_Func, conf.THREAD_FUNC)
+	thread_func: Thread_Func = conf.THREAD_FUNC #pyright: ignore [reportAssignmentType]
 	threads: list[DW_Medjay] = []
 	event = Event()
 	workers = thread_func.WORKERS
@@ -194,7 +192,7 @@ def dw_playlist_thread(
 	dir_name: str
 ) -> None:
 
-	thread_func: Thread_Func = cast(Thread_Func, conf.THREAD_FUNC)
+	thread_func: Thread_Func = conf.THREAD_FUNC #pyright: ignore [reportAssignmentType]
 	threads: list[DW_Medjay] = []
 	workers = thread_func.WORKERS
 	event = Event()

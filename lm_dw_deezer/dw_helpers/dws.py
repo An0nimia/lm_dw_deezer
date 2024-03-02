@@ -5,6 +5,8 @@ from api_deezer_full.media.types import Media
 
 from ..config import CONF
 from ..decrypt.utils import gen_song_hash
+from ..exceptions.no_stream_data import No_Stream_Data
+
 
 from ..types.aliases import (
 	ITrack_Out, Track_Out, F_BE_DW
@@ -25,8 +27,6 @@ def dw_helper(
 	func_be_dw: F_BE_DW
 ) -> ITrack_Out:
 
-	dw_track = None
-
 	if not media is None:
 		media_format = 'mp3'
 
@@ -37,25 +37,25 @@ def dw_helper(
 
 		path = f'{dir_name}/{fn}.{media_format}'
 
-		dw_track = Track_Out(
+		track_out = Track_Out(
 			path = path,
 			media_format = media.media_type,
 			quality = media.format,
 			quality_w = conf.QUALITIES[0],
 		)
 
-		if isfile(dw_track.path) and not conf.RE_DOWNLOAD:
-			return dw_track
+		if isfile(track_out.path) and not conf.RE_DOWNLOAD:
+			return track_out
 
 		id_track = track.fallback.id if track.fallback else track.id
 
-		func_be_dw(id_track, media.sources[0].url, dw_track.path)
+		func_be_dw(id_track, media.sources[0].url, track_out.path)
 	else:
-		dw_track = dw_helper_legacy(
+		track_out = dw_helper_legacy(
 			track, conf, dir_name, func_be_dw
 		)
 
-	return dw_track
+	return track_out
 
 
 def dw_helper_legacy(
@@ -68,15 +68,15 @@ def dw_helper_legacy(
 
 	path = f'{dir_name}/{fn}.{__LEGACY_MEDIA_FORMAT}'
 
-	dw_track = Track_Out(
+	track_out = Track_Out(
 		path = path,
 		media_format = __LEGACY_MEDIA_FORMAT,
 		quality = __LEGACY_MEDIA_QUALITY,
 		quality_w = conf.QUALITIES[0]
 	)
 
-	if isfile(dw_track.path) and not conf.RE_DOWNLOAD:
-		return dw_track
+	if isfile(track_out.path) and not conf.RE_DOWNLOAD:
+		return track_out
 
 	track_md5 = track.md5_origin
 	id_track = track.id
@@ -88,6 +88,10 @@ def dw_helper_legacy(
 		media_version = track.fallback.media_version
 
 	dw_url = gen_song_hash(track_md5, __LEGACY_MEDIA_QUALITY, id_track, media_version)
-	func_be_dw(id_track, dw_url, dw_track.path)
 
-	return dw_track
+	try:
+		func_be_dw(id_track, dw_url, track_out.path)
+	except No_Stream_Data:
+		track_out = None
+
+	return track_out

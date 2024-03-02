@@ -2,9 +2,12 @@
 
 from requests import get as req_get
 
+from ..exceptions.no_stream_data import No_Stream_Data
+
 from .utils import (
 	dec_chunk, gen_blowfish_key
 )
+
 
 __DEFAULT_BLOCK = 2048
 __DEFAULT_BLOCK_STREAM = __DEFAULT_BLOCK * 3
@@ -19,17 +22,20 @@ def decrypt_track(id_track: str, media_url: str, save_path: str):
 
 	with (
 		req_get(media_url, stream = True) as resp,
-		open(save_path, 'wb') as f
 	):
-		for chunk in resp.iter_content(__DEFAULT_BLOCK_STREAM):
-			l_chunk = len(chunk)
+		if resp.status_code != 200:
+			raise No_Stream_Data(id_track, save_path)
 
-			if l_chunk >= __DEFAULT_BLOCK:
-				decrypted_chunk = dec_chunk(
-					blowfish_key, chunk[:__DEFAULT_BLOCK]
-				)
+		with open(save_path, 'wb') as f:
+			for chunk in resp.iter_content(__DEFAULT_BLOCK_STREAM):
+				l_chunk = len(chunk)
 
-				f.write(decrypted_chunk)
-				chunk = chunk[__DEFAULT_BLOCK:]
+				if l_chunk >= __DEFAULT_BLOCK:
+					decrypted_chunk = dec_chunk(
+						blowfish_key, chunk[:__DEFAULT_BLOCK]
+					)
 
-			f.write(chunk)
+					f.write(decrypted_chunk)
+					chunk = chunk[__DEFAULT_BLOCK:]
+
+				f.write(chunk)
