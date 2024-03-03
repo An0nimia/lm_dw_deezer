@@ -56,4 +56,4 @@ jobs:
           context: "{{defaultContext}}:docker"
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: $DOCKER_TAG_VERSION,$DOCKER_TAG_VERSION_LATEST
+          tags: ${{ env.DOCKER_TAG_VERSION }},${{ env.DOCKER_TAG_VERSION_LATEST }}
