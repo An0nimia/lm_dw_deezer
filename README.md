@@ -25,5 +25,5 @@ lm_dw_deezer --help
 # Inside a docker container
 1. Run in a container
 	```bash
-	docker run -it --rm -v "$(pwd):/Songs" python:3.12 bash
+	docker run -it -v "$(pwd):/Songs" an0nimia/lm_dw_deezer:latest bash
 	```
