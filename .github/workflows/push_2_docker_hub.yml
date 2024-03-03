@@ -39,6 +39,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Build and export to Docker
+        uses: docker/build-push-action@v5
+        with:
+          context: "{{defaultContext}}:docker"
+          load: true
+          tags: ${{ env.DOCKER_TAG_VERSION }}
+
       - name: Test
         run: |
           docker run --rm ${{ env.DOCKER_TAG_VERSION }}
