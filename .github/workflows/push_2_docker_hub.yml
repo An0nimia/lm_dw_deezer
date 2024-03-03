@@ -30,8 +30,8 @@ jobs:
 
       - name: Set DOCKER_TAG_VERSION
         run: |
-          echo "DOCKER_TAG_VERSION=${{ env.DOCKER_TAG }}:${{ env.VERSION }}"
-          echo "DOCKER_TAG_VERSION_LATEST=${{ env.DOCKER_TAG }}:latest"
+          echo "DOCKER_TAG_VERSION=${{ env.DOCKER_TAG }}:${{ env.VERSION }} >> $GITHUB_ENV"
+          echo "DOCKER_TAG_VERSION_LATEST=${{ env.DOCKER_TAG }}:latest >> $GITHUB_ENV"
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
