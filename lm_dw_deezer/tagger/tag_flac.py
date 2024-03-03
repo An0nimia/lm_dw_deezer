@@ -1,4 +1,4 @@
-# pyright: reportUnknownMemberType=false, reportOptionalSubscript=false, reportGeneralTypeIssues=false
+#pyright: reportUnknownMemberType=false, reportOptionalSubscript=false, reportIndexIssue=false
 
 from __future__ import annotations
 

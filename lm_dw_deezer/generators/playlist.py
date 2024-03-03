@@ -1,8 +1,11 @@
 # https://stackoverflow.com/questions/34073370/best-way-to-receive-the-return-value-from-a-python-generator
 
+from ..types import (
+	DW_Track, DW_Playlist
+)
+
 from ..types.aliases import (
-	G_Playlist, G_DW_Track,
-	DW_Playlist, DW_Track
+	G_Playlist, G_DW_Track
 )
 
 

@@ -13,11 +13,10 @@ from api_deezer_full.media.exceptions import Insufficient_Rights
 
 from ..logger import LOG
 
-from ..config import (
-	CONF, Thread_Func
-)
+from ..config.conf import DEFAULT_SETTINGS_PATH
 
-from ..config.enums import (
+from ..config import (
+	CONF, Thread_Func,
 	QUALITY, COMPRESSION,
 	DECRYPTOR, FILE_FORMAT, FOLDER_FORMAT
 )
@@ -27,7 +26,8 @@ from ..generators import (
 )
 
 from .utils import (
-	init_check, task, write_arl
+	init_check, task,
+	write_arl, import_conf
 )
 
 
@@ -75,30 +75,42 @@ def trk(
 		)
 	],
 
+	config_path: Annotated[
+		str, Option(
+			help = f'The path where conf file is stored. Default is: \'{DEFAULT_SETTINGS_PATH}\''
+		)
+	] = DEFAULT_SETTINGS_PATH,
+
 	quality: Annotated[
-		list[QUALITY], Option(
+		Optional[list[QUALITY]], Option(
 			case_sensitive = False,
 			help = 'Choose download quality (Can specify multiple if you prefer a quality order)',
 		)
-	] = default_conf.QUALITIES,
+	] = None,
 
 	out_dir: Annotated[
-		str, Option(
+		Optional[str], Option(
 			help = 'Choose output dir'
 		)
-	] = default_conf.OUTPUT_FOLDER,
+	] = None,
 
 	re_download: Annotated[
-		bool, Option(
+		Optional[bool], Option(
 			help = 'If track exist re-download it'
 		)
-	] = default_conf.RE_DOWNLOAD,
+	] = None,
+
+	legacy_dw_recursion: Annotated[
+		Optional[bool], Option(
+			help = 'Try downloading track using old method'
+		)
+	] = None,
 
 	file_format: Annotated[
-		FILE_FORMAT, Option(
+		Optional[FILE_FORMAT], Option(
 			help = 'File format for customize output filename'
 		)
-	] = FILE_FORMAT.TITLE_ARTISTS_ISRC_QUALITY,
+	] = None,
 
 	c_file_format: Annotated[
 		Optional[str], Option(
@@ -107,10 +119,10 @@ def trk(
 	] = None,
 
 	folder_format: Annotated[
-		FOLDER_FORMAT, Option(
+		Optional[FOLDER_FORMAT], Option(
 			help = 'Folder format for customize output folder name'
 		)
-	] = FOLDER_FORMAT.ALBUM_ARTISTS,
+	] = None,
 
 	c_folder_format: Annotated[
 		Optional[str], Option(
@@ -119,10 +131,10 @@ def trk(
 	] = None,
 
 	be_dw: Annotated[
-		DECRYPTOR, Option(
+		Optional[DECRYPTOR], Option(
 			help = 'Backed for downloading'
 		)
-	] = DECRYPTOR.C
+	] = None
 ):
 
 	if not c_file_format is None:
@@ -131,14 +143,22 @@ def trk(
 	if not c_folder_format is None:
 		folder_format = c_folder_format #pyright: ignore [reportAssignmentType]
 
-	conf = CONF(
-		QUALITIES = quality,
-		OUTPUT_FOLDER = out_dir,
-		RE_DOWNLOAD = re_download,
-		DECRYPTOR = be_dw,
-		FILE_FORMAT = file_format,
-		FOLDER_FORMAT = folder_format
-	)
+	conf = import_conf(config_path)
+
+	if quality:
+		conf.QUALITIES = quality
+	if not out_dir is None:
+		conf.OUTPUT_FOLDER = out_dir
+	if not re_download is None:
+		conf.RE_DOWNLOAD = re_download
+	if not legacy_dw_recursion is None:
+		conf.LEGACY_DOWNLOAD_RECURSION = legacy_dw_recursion
+	if not file_format is None:
+		conf.FILE_FORMAT = file_format
+	if not folder_format is None:
+		conf.FOLDER_FORMAT = folder_format
+	if not be_dw is None:
+		conf.DECRYPTOR = be_dw
 
 	try:
 		Gen_Track(
@@ -157,23 +177,66 @@ def alb(
 		)
 	],
 
+	config_path: Annotated[
+		str, Option(
+			help = f'The path where conf file is stored. Default is: \'{DEFAULT_SETTINGS_PATH}\''
+		)
+	] = DEFAULT_SETTINGS_PATH,
+
 	quality: Annotated[
-		list[QUALITY], Option(
+		Optional[list[QUALITY]], Option(
+			case_sensitive = False,
 			help = 'Choose download quality (Can specify multiple if you prefer a quality order)',
 		)
-	] = default_conf.QUALITIES,
+	] = None,
 
 	out_dir: Annotated[
-		str, Option(
+		Optional[str], Option(
 			help = 'Choose output dir'
 		)
 	] = default_conf.OUTPUT_FOLDER,
 
 	re_download: Annotated[
-		bool, Option(
+		Optional[bool], Option(
 			help = 'If track exist re-download it'
 		)
-	] = default_conf.RE_DOWNLOAD,
+	] = None,
+
+	legacy_dw_recursion: Annotated[
+		Optional[bool], Option(
+			help = 'Try downloading track using old method'
+		)
+	] = None,
+
+	file_format: Annotated[
+		Optional[FILE_FORMAT], Option(
+			help = 'File format for customize output filename'
+		)
+	] = None,
+
+	c_file_format: Annotated[
+		Optional[str], Option(
+			help = 'File format for customize output filename, see the available params in \'file_format\' option'
+		)
+	] = None,
+
+	folder_format: Annotated[
+		Optional[FOLDER_FORMAT], Option(
+			help = 'Folder format for customize output folder name'
+		)
+	] = None,
+
+	c_folder_format: Annotated[
+		Optional[str], Option(
+			help = 'Folder format for customize output folder name, see the available params in \'folder_format\' option'
+		)
+	] = None,
+
+	be_dw: Annotated[
+		Optional[DECRYPTOR], Option(
+			help = 'Backed for downloading'
+		)
+	] = None,
 
 	fast: Annotated[
 		bool, Option(
@@ -192,37 +255,7 @@ def alb(
 		Optional[COMPRESSION], Option(
 			help = 'Archive type'
 		)
-	] = None,
-
-	file_format: Annotated[
-		FILE_FORMAT, Option(
-			help = 'File format for customize output filename'
-		)
-	] = FILE_FORMAT.TITLE_ARTISTS_ISRC_QUALITY,
-
-	c_file_format: Annotated[
-		Optional[str], Option(
-			help = 'File format for customize output filename, see the available params in \'file_format\' option'
-		)
-	] = None,
-
-	folder_format: Annotated[
-		FOLDER_FORMAT, Option(
-			help = 'Folder format for customize output folder name'
-		)
-	] = FOLDER_FORMAT.ALBUM_ARTISTS,
-
-	c_folder_format: Annotated[
-		Optional[str], Option(
-			help = 'Folder format for customize output folder name, see the available params in \'folder_format\' option'
-		)
-	] = None,
-
-	be_dw: Annotated[
-		DECRYPTOR, Option(
-			help = 'Backed for downloading'
-		)
-	] = DECRYPTOR.C
+	] = None
 ):
 	if not c_file_format is None:
 		file_format = c_file_format #pyright: ignore [reportAssignmentType]
@@ -230,15 +263,24 @@ def alb(
 	if not c_folder_format is None:
 		folder_format = c_folder_format #pyright: ignore [reportAssignmentType]
 
-	conf = CONF(
-		QUALITIES = quality,
-		OUTPUT_FOLDER = out_dir,
-		RE_DOWNLOAD = re_download,
-		ARCHIVE = archive,
-		DECRYPTOR = be_dw,
-		FILE_FORMAT = file_format,
-		FOLDER_FORMAT = folder_format
-	)
+	conf = import_conf(config_path)
+
+	if quality:
+		conf.QUALITIES = quality
+	if not out_dir is None:
+		conf.OUTPUT_FOLDER = out_dir
+	if not re_download is None:
+		conf.RE_DOWNLOAD = re_download
+	if not legacy_dw_recursion is None:
+		conf.LEGACY_DOWNLOAD_RECURSION = legacy_dw_recursion
+	if not file_format is None:
+		conf.FILE_FORMAT = file_format
+	if not folder_format is None:
+		conf.FOLDER_FORMAT = folder_format
+	if not be_dw is None:
+		conf.DECRYPTOR = be_dw
+	if not archive is None:
+		conf.ARCHIVE = archive
 
 	if fast:
 		conf.THREAD_FUNC = Thread_Func(
@@ -258,23 +300,66 @@ def ply(
 		)
 	],
 
+	config_path: Annotated[
+		str, Option(
+			help = f'The path where conf file is stored. Default is: \'{DEFAULT_SETTINGS_PATH}\''
+		)
+	] = DEFAULT_SETTINGS_PATH,
+
 	quality: Annotated[
-		list[QUALITY], Option(
+		Optional[list[QUALITY]], Option(
+			case_sensitive = False,
 			help = 'Choose download quality (Can specify multiple if you prefer a quality order)',
 		)
-	] = default_conf.QUALITIES,
+	] = None,
 
 	out_dir: Annotated[
-		str, Option(
+		Optional[str], Option(
 			help = 'Choose output dir'
 		)
 	] = default_conf.OUTPUT_FOLDER,
 
 	re_download: Annotated[
-		bool, Option(
+		Optional[bool], Option(
 			help = 'If track exist re-download it'
 		)
-	] = default_conf.RE_DOWNLOAD,
+	] = None,
+
+	legacy_dw_recursion: Annotated[
+		Optional[bool], Option(
+			help = 'Try downloading track using old method'
+		)
+	] = None,
+
+	file_format: Annotated[
+		Optional[FILE_FORMAT], Option(
+			help = 'File format for customize output filename'
+		)
+	] = None,
+
+	c_file_format: Annotated[
+		Optional[str], Option(
+			help = 'File format for customize output filename, see the available params in \'file_format\' option'
+		)
+	] = None,
+
+	folder_format: Annotated[
+		Optional[FOLDER_FORMAT], Option(
+			help = 'Folder format for customize output folder name'
+		)
+	] = None,
+
+	c_folder_format: Annotated[
+		Optional[str], Option(
+			help = 'Folder format for customize output folder name, see the available params in \'folder_format\' option'
+		)
+	] = None,
+
+	be_dw: Annotated[
+		Optional[DECRYPTOR], Option(
+			help = 'Backed for downloading'
+		)
+	] = None,
 
 	fast: Annotated[
 		bool, Option(
@@ -293,37 +378,7 @@ def ply(
 		Optional[COMPRESSION], Option(
 			help = 'Archive type'
 		)
-	] = None,
-
-	file_format: Annotated[
-		FILE_FORMAT, Option(
-			help = 'File format for customize output filename'
-		)
-	] = FILE_FORMAT.TITLE_ARTISTS_ISRC_QUALITY,
-
-	c_file_format: Annotated[
-		Optional[str], Option(
-			help = 'File format for customize output filename, see the available params in \'file_format\' option'
-		)
-	] = None,
-
-	folder_format: Annotated[
-		FOLDER_FORMAT, Option(
-			help = 'Folder format for customize output folder name'
-		)
-	] = FOLDER_FORMAT.ALBUM_ARTISTS,
-
-	c_folder_format: Annotated[
-		Optional[str], Option(
-			help = 'Folder format for customize output folder name, see the available params in \'folder_format\' option'
-		)
-	] = None,
-
-	be_dw: Annotated[
-		DECRYPTOR, Option(
-			help = 'Backed for downloading'
-		)
-	] = DECRYPTOR.C
+	] = None
 ):	
 	if not c_file_format is None:
 		file_format = c_file_format #pyright: ignore [reportAssignmentType]
@@ -331,15 +386,24 @@ def ply(
 	if not c_folder_format is None:
 		folder_format = c_folder_format #pyright: ignore [reportAssignmentType]
 
-	conf = CONF(
-		QUALITIES = quality,
-		OUTPUT_FOLDER = out_dir,
-		RE_DOWNLOAD = re_download,
-		ARCHIVE = archive,
-		DECRYPTOR = be_dw,
-		FILE_FORMAT = file_format,
-		FOLDER_FORMAT = folder_format
-	)
+	conf = import_conf(config_path)
+
+	if quality:
+		conf.QUALITIES = quality
+	if not out_dir is None:
+		conf.OUTPUT_FOLDER = out_dir
+	if not re_download is None:
+		conf.RE_DOWNLOAD = re_download
+	if not legacy_dw_recursion is None:
+		conf.LEGACY_DOWNLOAD_RECURSION = legacy_dw_recursion
+	if not file_format is None:
+		conf.FILE_FORMAT = file_format
+	if not folder_format is None:
+		conf.FOLDER_FORMAT = folder_format
+	if not be_dw is None:
+		conf.DECRYPTOR = be_dw
+	if not archive is None:
+		conf.ARCHIVE = archive
 
 	if fast:
 		conf.THREAD_FUNC = Thread_Func(

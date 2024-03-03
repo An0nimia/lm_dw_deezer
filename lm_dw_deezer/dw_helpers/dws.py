@@ -8,8 +8,10 @@ from ..decrypt.utils import gen_song_hash
 from ..exceptions.no_stream_data import No_Stream_Data
 
 
-from ..types.aliases import (
-	ITrack_Out, Track_Out, F_BE_DW
+from ..types.aliases import F_BE_DW
+
+from ..types import (
+	ITrack_Out, Track_Out
 )
 
 from .utils import get_fn
@@ -26,6 +28,8 @@ def dw_helper(
 	dir_name: str,
 	func_be_dw: F_BE_DW
 ) -> ITrack_Out:
+
+	track_out = None
 
 	if not media is None:
 		media_format = 'mp3'
@@ -51,9 +55,10 @@ def dw_helper(
 
 		func_be_dw(id_track, media.sources[0].url, track_out.path)
 	else:
-		track_out = dw_helper_legacy(
-			track, conf, dir_name, func_be_dw
-		)
+		if conf.LEGACY_DOWNLOAD_RECURSION:
+			track_out = dw_helper_legacy(
+				track, conf, dir_name, func_be_dw
+			)
 
 	return track_out
 

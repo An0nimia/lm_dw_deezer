@@ -7,11 +7,11 @@ from api_deezer_full.gw.types import Track as GW_Track
 from ..config.image import Image
 
 from .utils import get_image
-from .track_out import Track_Out
+from .track_out import ITrack_Out
 from .pipe_ext import Track as PIPE_Track
 
 
-type ITrack_Out = Track_Out | None
+type DW_Tracks = list[DW_Track]
 
 
 @dataclass

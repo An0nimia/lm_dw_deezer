@@ -36,7 +36,7 @@ def helper_album(
 
 	tagger_track(
 		gw_info = gw_track_info,
-		out = track_out,
+		track_out = track_out,
 		pipe_info = pipe_track_info,
 		pipe_info_album = album_info.pipe_info,
 		image_bytes = album_info.image_bytes

@@ -1,0 +1,18 @@
+{
+    "OUTPUT_FOLDER": "Songs/",
+    "FILE_FORMAT": "{title} - {artists} {ISRC} ({QUALITY})",
+    "FOLDER_FORMAT": "{album} - {artists}",
+    "LEGACY_DOWNLOAD_RECURSION": true,
+    "RE_DOWNLOAD": false,
+    "ARCHIVE": "ZSTD",
+    "TRACK_IMAGE": {
+        "width": 1000,
+        "height": 1000
+    },
+    "DECRYPTOR": "RUST",
+    "_QUALITIES": [
+        "MP3_320",
+        "FLAC",
+        "MP3_128"
+    ]
+}

@@ -6,17 +6,11 @@ from collections.abc import (
 	Generator, Callable
 )
 
-from .dw_track import (
-	DW_Track, Track_Out, ITrack_Out
-)
+from .track_out import ITrack_Out
 
-from .dw_album import (
-	DW_Album, ITracks_Out
-)
-
-from .dw_playlist import (
-	DW_Playlist, DW_Tracks
-)
+from .dw_track import DW_Track
+from .dw_album import DW_Album
+from .dw_playlist import DW_Playlist
 
 
 type G_DW_Track = Generator[DW_Track, None, None]

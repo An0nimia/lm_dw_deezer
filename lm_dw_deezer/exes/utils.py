@@ -6,7 +6,9 @@ from threading import Event
 
 from api_deezer_full.gw.exceptions import Arl_Invalid
 
-from lm_dw_deezer.types.aliases import (
+from ..config import CONF
+
+from ..types.aliases import (
 	G_DW_Track, G_Track_Out
 )
 
@@ -82,3 +84,12 @@ def init_check(override: bool = False) -> DW:
 
 def task(event: Event, track: G_DW_Track | G_Track_Out):
 	next(track)
+
+
+def import_conf(conf_path: str) -> CONF:
+	conf = CONF()
+
+	if isfile(conf_path):
+		conf = CONF.jmport(conf_path)
+
+	return conf

@@ -2,11 +2,8 @@ from dataclasses import (
 	dataclass, field
 )
 
-from .dw_track import DW_Track
+from .dw_track import DW_Tracks
 from .pipe_ext import Playlist as PIPE_Playlist
-
-
-type DW_Tracks = list[DW_Track]
 
 
 @dataclass

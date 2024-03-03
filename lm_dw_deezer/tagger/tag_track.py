@@ -20,24 +20,24 @@ from .helpers import generate_rgain
 
 def tagger_track(
 	gw_info: GW_Track,
-	out: Track_Out | None,
+	track_out: Track_Out | None,
 	pipe_info: PIPE_Track,
 	pipe_info_album: PIPE_Album | None,
 	image_bytes: bytes,
 ) -> None:
 
-	if not out is None and not pipe_info_album is None:
+	if not track_out is None and not pipe_info_album is None:
 		LOG.info(f'Adding tag to \'{gw_info.title}\'')
 
 		tag(
 			gw_track_info = gw_info,
 			pipe_track_info = pipe_info,
 			pipe_album_info = pipe_info_album,
-			out = out,
+			track_out = track_out,
 			image_bytes = image_bytes,
 		)
 
-		LOG.info(f'Successful downloaded \'{gw_info.title}\' at \'{out.path}\'')
+		LOG.info(f'Successful downloaded \'{gw_info.title}\' at \'{track_out.path}\'')
 	else:
 		LOG.warning(f'Track \'{gw_info.title}\' - \'{gw_info.artists[0].name}\' cannot be downloaded')
 
@@ -46,16 +46,16 @@ def tag(
 	gw_track_info: GW_Track,
 	pipe_track_info: PIPE_Track,
 	pipe_album_info: PIPE_Album,
-	out: Track_Out,
+	track_out: Track_Out,
 	image_bytes: bytes,
 ) -> None:
 
 	tagger = TAG_MP3
 
-	if out.quality == 'FLAC':
+	if track_out.quality == 'FLAC':
 		tagger = TAG_FLAC
 
-	with tagger(out.path) as tagger:
+	with tagger(track_out.path) as tagger:
 		tagger.add_image(image_bytes)
 		tagger.add_comment()
 
@@ -64,7 +64,7 @@ def tag(
 				generate_rgain(gw_track_info.gain)
 			)
 
-		if out.quality == 'FLAC':
+		if track_out.quality == 'FLAC':
 			tagger.add_audio_length(-gw_track_info.duration)
 
 		lyrics = pipe_track_info.lyrics

@@ -2,7 +2,7 @@ from pathlib import Path
 
 from tarfile import open as TAR
 
-from ..types.aliases import (
+from ..types import (
 	DW_Album, DW_Playlist
 )
 

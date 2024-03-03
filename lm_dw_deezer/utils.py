@@ -8,13 +8,14 @@ from api_deezer_full.gw.types.track import (
 from .config.enums import COMPRESSION
 
 
-from .types.aliases import (
+from .types import (
 	DW_Album, DW_Playlist
 )
 
 from .types.pipe_ext import (
 	Playlist_Tracks, Playlist_Track,
 )
+
 
 from .compressions import (
 	zip_compress, gzip_compress, zstd_compress

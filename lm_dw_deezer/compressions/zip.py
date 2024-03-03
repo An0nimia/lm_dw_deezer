@@ -4,7 +4,7 @@ from zipfile import (
 	ZipFile, ZIP_DEFLATED
 )
 
-from ..types.aliases import (
+from ..types import (
 	DW_Tracks, ITracks_Out,
 	DW_Album, DW_Playlist
 )

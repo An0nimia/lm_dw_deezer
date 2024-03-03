@@ -6,7 +6,7 @@ from tarfile import open as TAR
 
 from zstandard import ZstdCompressor
 
-from ..types.aliases import (
+from ..types import (
 	DW_Album, DW_Playlist
 )
 
