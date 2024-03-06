@@ -11,13 +11,12 @@ from dataclasses import (
 	dataclass, field, asdict
 )
 
-from ..exes.data_utils import working_dir
-
 from .image import Image
 
 from .thread_func import Thread_Func
 
 from .utils import create_media_json
+from .utils_infos import DEFAULT_SETTINGS_PATH
 
 from .enums import (
 	QUALITY as E_QUALITY,
@@ -27,7 +26,6 @@ from .enums import (
 	FOLDER_FORMAT as E_FOLDER_FORMAT
 )
 
-DEFAULT_SETTINGS_PATH = f'{working_dir}/settings.json'
 
 # https://stackoverflow.com/questions/52063759/passing-default-list-argument-to-dataclasses
 @dataclass

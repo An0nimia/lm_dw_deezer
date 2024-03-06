@@ -6,7 +6,7 @@ from importlib.util import find_spec
 
 be_dw_rust_supported = find_spec('lm_deezer_bf_dec')
 
-if not be_dw_rust_supported is None:
+if be_dw_rust_supported:
 	from lm_deezer_bf_dec import decrypt_track as decrypt_track_w_RUST
 else:
 	decrypt_track_w_RUST = None
@@ -69,7 +69,7 @@ def wait_threads(threads: list[DW_Medjay]) -> None:
 def get_be_dw(backend_dw: DECRYPTOR) -> F_BE_DW:
 	match backend_dw:
 		case DECRYPTOR.RUST:
-			if decrypt_track_w_RUST is None:
+			if not decrypt_track_w_RUST:
 				raise No_BE(DECRYPTOR.RUST)
 
 			be_dw = decrypt_track_w_RUST

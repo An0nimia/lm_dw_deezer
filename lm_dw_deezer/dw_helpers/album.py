@@ -1,13 +1,10 @@
 from api_deezer_full.gw.types import Track
 from api_deezer_full.media.types import Media
 
-from ..types.pipe_ext import (
-	Album_Track as PIPE_Album_Track
-)
-
 from ..config import CONF
 from ..types import DW_Album
 from ..tagger import tagger_track
+from ..types.pipe_ext import Album_Track as PIPE_Album_Track
 
 from ..types.aliases import (
 	G_Track_Out, F_BE_DW

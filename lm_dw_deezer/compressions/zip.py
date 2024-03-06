@@ -37,7 +37,7 @@ def __4_DW_Track(
 ) -> None:
 
 	for dw_track in dw_tracks:
-		if dw_track.dw_track is None:
+		if not dw_track.dw_track:
 			continue
 
 		arc_name = f'{Path(dw_track.dw_track.path).name}'
@@ -55,7 +55,7 @@ def __4_ITrack_out(
 ) -> None:
 
 	for dw_track in dw_tracks:
-		if dw_track is None:
+		if not dw_track:
 			continue
 
 		arc_name = f'{Path(dw_track.path).name}'

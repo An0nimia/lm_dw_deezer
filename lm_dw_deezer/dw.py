@@ -38,6 +38,7 @@ from .types.pipe_ext import (
 	Playlist as PIPE_Playlist
 )
 
+
 LOG()
 
 class DW(API_PIPE):
@@ -151,7 +152,7 @@ class DW(API_PIPE):
 
 		dir_name = create_dir_w_track(conf, gw_info.tracks[0])
 
-		if conf.THREAD_FUNC is None:
+		if not conf.THREAD_FUNC:
 			yield from dw_album_seq(
 				medias = medias,
 				album_info = album_info,
@@ -166,7 +167,7 @@ class DW(API_PIPE):
 				dir_name = dir_name
 			)
 
-		if not conf.ARCHIVE is None:
+		if conf.ARCHIVE:
 			album_info.zip_path = make_archive(
 				type_arc = conf.ARCHIVE,
 				dir_name = dir_name,
@@ -213,7 +214,7 @@ class DW(API_PIPE):
 		tracks = merge_track_data(pipe_info.tracks, playlist_data.tracks)		
 		dir_name = create_dir(conf, pipe_info.title)
 
-		if conf.THREAD_FUNC is None:
+		if not conf.THREAD_FUNC:
 			yield from dw_playlist_seq(
 				medias = medias,
 				playlist_info = playlist_info,
@@ -232,7 +233,7 @@ class DW(API_PIPE):
 				dir_name = dir_name
 			)
 
-		if not conf.ARCHIVE is None:
+		if conf.ARCHIVE:
 			playlist_info.zip_path = make_archive(
 				type_arc = conf.ARCHIVE,
 				dir_name = dir_name,

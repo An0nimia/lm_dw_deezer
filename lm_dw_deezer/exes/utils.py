@@ -62,7 +62,7 @@ def check_arl(override: bool = False) -> str:
 		case _:
 			arl = prompt('Please input your arl')
 
-	if arl is None:
+	if not arl:
 		arl = prompt('Please input your arl')
 
 	write_arl(arl)

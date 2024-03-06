@@ -2,9 +2,8 @@ from api_deezer_full.gw.types import Track
 from api_deezer_full.media.types import Media
 
 from ..config import CONF
-from ..tagger import tagger_track
-
 from ..types import DW_Track
+from ..tagger import tagger_track
 from ..types.pipe_ext import Track as PIPE_Track
 
 from ..types.aliases import (
@@ -23,7 +22,6 @@ def helper_playlist(
 	dir_name: str,
 	func_be_dw: F_BE_DW
 ) -> G_DW_Track:
-
 
 	track_out = dw_helper(
 		track = gw_track_info,

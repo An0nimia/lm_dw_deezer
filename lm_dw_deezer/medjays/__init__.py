@@ -36,7 +36,7 @@ class DW_Medjay(Thread):
 	def run(self):
 		try:
 			if self.__target is not None:
-				if self.__kwargs is None:
+				if not self.__kwargs:
 					self.__target(self.event, *self.__args)
 				else:
 					self.__target(self.event, *self.__args, **self.__kwargs)

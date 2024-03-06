@@ -1,4 +1,4 @@
-# pyright: reportUnknownMemberType=false
+#pyright: reportUnknownMemberType=false
 
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ from .helpers import (
 	lyric_w_time, get_contributors, get_composers
 )
 
-from .utils import (
+from .utils_infos import (
 	SOURCE, ENCODER
 )
 

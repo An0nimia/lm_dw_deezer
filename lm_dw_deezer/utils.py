@@ -4,18 +4,14 @@ from api_deezer_full.gw.types.track import (
 	Track, Base_Track, DEFAULT_DATE
 )
 
-
 from .config.enums import COMPRESSION
-
 
 from .types import (
 	DW_Album, DW_Playlist
 )
-
 from .types.pipe_ext import (
 	Playlist_Tracks, Playlist_Track,
 )
-
 
 from .compressions import (
 	zip_compress, gzip_compress, zstd_compress
@@ -31,7 +27,7 @@ def __normalize(
 	pipe_playlist_track_JSON['GENRE_ID'] = '0'
 	pipe_playlist_track_JSON['DIGITAL_RELEASE_DATE'] = pipe_playlist_track.release_date
 	pipe_playlist_track_JSON['PHYSICAL_RELEASE_DATE'] = DEFAULT_DATE
-	pipe_playlist_track_JSON['STATUS'] = True if not gw_playlist_track.fallback else False
+	pipe_playlist_track_JSON['STATUS'] = 1 if not gw_playlist_track.fallback else 0
 	pipe_playlist_track_JSON['DISK_NUMBER'] = pipe_playlist_track.disk_info.disk_number
 
 

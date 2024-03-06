@@ -26,7 +26,7 @@ def tagger_track(
 	image_bytes: bytes,
 ) -> None:
 
-	if not track_out is None and not pipe_info_album is None:
+	if track_out and pipe_info_album:
 		LOG.info(f'Adding tag to \'{gw_info.title}\'')
 
 		tag(

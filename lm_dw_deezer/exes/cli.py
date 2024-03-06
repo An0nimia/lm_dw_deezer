@@ -137,27 +137,27 @@ def trk(
 	] = None
 ):
 
-	if not c_file_format is None:
+	if c_file_format:
 		file_format = c_file_format #pyright: ignore [reportAssignmentType]
 
-	if not c_folder_format is None:
+	if c_folder_format:
 		folder_format = c_folder_format #pyright: ignore [reportAssignmentType]
 
 	conf = import_conf(config_path)
 
 	if quality:
 		conf.QUALITIES = quality
-	if not out_dir is None:
+	if out_dir:
 		conf.OUTPUT_FOLDER = out_dir
-	if not re_download is None:
+	if re_download:
 		conf.RE_DOWNLOAD = re_download
-	if not legacy_dw_recursion is None:
+	if legacy_dw_recursion:
 		conf.LEGACY_DOWNLOAD_RECURSION = legacy_dw_recursion
-	if not file_format is None:
+	if file_format:
 		conf.FILE_FORMAT = file_format
-	if not folder_format is None:
+	if folder_format:
 		conf.FOLDER_FORMAT = folder_format
-	if not be_dw is None:
+	if be_dw:
 		conf.DECRYPTOR = be_dw
 
 	try:
@@ -257,29 +257,29 @@ def alb(
 		)
 	] = None
 ):
-	if not c_file_format is None:
+	if c_file_format:
 		file_format = c_file_format #pyright: ignore [reportAssignmentType]
 
-	if not c_folder_format is None:
+	if c_folder_format:
 		folder_format = c_folder_format #pyright: ignore [reportAssignmentType]
 
 	conf = import_conf(config_path)
 
 	if quality:
 		conf.QUALITIES = quality
-	if not out_dir is None:
+	if out_dir:
 		conf.OUTPUT_FOLDER = out_dir
-	if not re_download is None:
+	if re_download:
 		conf.RE_DOWNLOAD = re_download
-	if not legacy_dw_recursion is None:
+	if legacy_dw_recursion:
 		conf.LEGACY_DOWNLOAD_RECURSION = legacy_dw_recursion
-	if not file_format is None:
+	if file_format:
 		conf.FILE_FORMAT = file_format
-	if not folder_format is None:
+	if folder_format:
 		conf.FOLDER_FORMAT = folder_format
-	if not be_dw is None:
+	if be_dw:
 		conf.DECRYPTOR = be_dw
-	if not archive is None:
+	if archive:
 		conf.ARCHIVE = archive
 
 	if fast:
@@ -380,29 +380,29 @@ def ply(
 		)
 	] = None
 ):	
-	if not c_file_format is None:
+	if c_file_format:
 		file_format = c_file_format #pyright: ignore [reportAssignmentType]
 
-	if not c_folder_format is None:
+	if c_folder_format:
 		folder_format = c_folder_format #pyright: ignore [reportAssignmentType]
 
 	conf = import_conf(config_path)
 
 	if quality:
 		conf.QUALITIES = quality
-	if not out_dir is None:
+	if out_dir:
 		conf.OUTPUT_FOLDER = out_dir
-	if not re_download is None:
+	if re_download:
 		conf.RE_DOWNLOAD = re_download
-	if not legacy_dw_recursion is None:
+	if legacy_dw_recursion:
 		conf.LEGACY_DOWNLOAD_RECURSION = legacy_dw_recursion
-	if not file_format is None:
+	if file_format:
 		conf.FILE_FORMAT = file_format
-	if not folder_format is None:
+	if folder_format:
 		conf.FOLDER_FORMAT = folder_format
-	if not be_dw is None:
+	if be_dw:
 		conf.DECRYPTOR = be_dw
-	if not archive is None:
+	if archive:
 		conf.ARCHIVE = archive
 
 	if fast:

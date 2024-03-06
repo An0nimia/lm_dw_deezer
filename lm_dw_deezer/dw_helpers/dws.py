@@ -4,11 +4,9 @@ from api_deezer_full.gw.types import Track
 from api_deezer_full.media.types import Media
 
 from ..config import CONF
+from ..types.aliases import F_BE_DW
 from ..decrypt.utils import gen_song_hash
 from ..exceptions.no_stream_data import No_Stream_Data
-
-
-from ..types.aliases import F_BE_DW
 
 from ..types import (
 	ITrack_Out, Track_Out
@@ -16,9 +14,9 @@ from ..types import (
 
 from .utils import get_fn
 
-
-__LEGACY_MEDIA_FORMAT = 'mp3'
-__LEGACY_MEDIA_QUALITY = 'MP3_128'
+from .utils_infos import (
+	LEGACY_MEDIA_FORMAT, LEGACY_MEDIA_QUALITY
+)
 
 
 def dw_helper(
@@ -31,7 +29,7 @@ def dw_helper(
 
 	track_out = None
 
-	if not media is None:
+	if media:
 		media_format = 'mp3'
 
 		if media.format == 'FLAC':
@@ -57,7 +55,10 @@ def dw_helper(
 	else:
 		if conf.LEGACY_DOWNLOAD_RECURSION:
 			track_out = dw_helper_legacy(
-				track, conf, dir_name, func_be_dw
+				track = track,
+				conf = conf,
+				dir_name = dir_name,
+				func_be_dw = func_be_dw
 			)
 
 	return track_out
@@ -70,14 +71,14 @@ def dw_helper_legacy(
 	func_be_dw: F_BE_DW
 ) -> ITrack_Out:
 
-	fn = get_fn(track, conf.FILE_FORMAT, __LEGACY_MEDIA_QUALITY)
+	fn = get_fn(track, conf.FILE_FORMAT, LEGACY_MEDIA_QUALITY)
 
-	path = f'{dir_name}/{fn}.{__LEGACY_MEDIA_FORMAT}'
+	path = f'{dir_name}/{fn}.{LEGACY_MEDIA_FORMAT}'
 
 	track_out = Track_Out(
 		path = path,
-		media_format = __LEGACY_MEDIA_FORMAT,
-		quality = __LEGACY_MEDIA_QUALITY,
+		media_format = LEGACY_MEDIA_FORMAT,
+		quality = LEGACY_MEDIA_QUALITY,
 		quality_w = conf.QUALITIES[0]
 	)
 
@@ -93,7 +94,7 @@ def dw_helper_legacy(
 		track_md5 = track.fallback.md5_origin
 		media_version = track.fallback.media_version
 
-	dw_url = gen_song_hash(track_md5, __LEGACY_MEDIA_QUALITY, id_track, media_version)
+	dw_url = gen_song_hash(track_md5, LEGACY_MEDIA_QUALITY, id_track, media_version)
 
 	try:
 		func_be_dw(id_track, dw_url, track_out.path)
