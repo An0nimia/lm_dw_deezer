@@ -8,9 +8,10 @@ from api_deezer_full.gw.exceptions import Arl_Invalid
 
 from ..config import CONF
 
-from ..types.aliases import (
-	G_DW_Track, G_Track_Out
+from ..dw_helpers import (
+	Helper_Album, Helper_Playlist
 )
+
 
 
 from json import (
@@ -82,8 +83,8 @@ def init_check(override: bool = False) -> DW:
 			exit()
 
 
-def task(event: Event, track: G_DW_Track | G_Track_Out):
-	next(track)
+def task(event: Event, media: Helper_Album | Helper_Playlist):
+	media.dw()
 
 
 def import_conf(conf_path: str) -> CONF:

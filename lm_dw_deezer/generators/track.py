@@ -1,11 +1,10 @@
 # https://stackoverflow.com/questions/34073370/best-way-to-receive-the-return-value-from-a-python-generator
 
-from ..types import (
-	DW_Track, ITrack_Out
-)
+from ..types import DW_Track
 
-from ..types.aliases import (
-	G_Track, G_Track_Out,
+
+from ..dw_helpers.track import (
+	G_Track, G_DW_Track, Helper_Track
 )
 
 
@@ -19,14 +18,15 @@ class Gen_Track:
 		self.track: DW_Track = next(self.__gen) #pyright: ignore [reportArgumentType]
 
 
-	def dw(self) -> ITrack_Out:
-		return next(self.__gen) #pyright: ignore [reportReturnType]
+	def next(self) -> Helper_Track:
+		return next(self.__gen) #pyright: ignore [reportArgumentType]
 
 
-	def __iter__(self) -> G_Track_Out:
+	def __iter__(self) -> G_DW_Track:
 		yield from self.__gen #pyright: ignore [reportReturnType]
 
 
 	def wait(self) -> None:
-		for _ in self.__gen:
-			...
+		track: Helper_Track
+		for track in self.__gen: #pyright: ignore [reportAssignmentType]
+			track.dw()

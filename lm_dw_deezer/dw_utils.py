@@ -28,20 +28,21 @@ from .config import (
 	CONF, Thread_Func
 )
 
-from .types.aliases import (
-	G_Track_Out, G_DW_Track, F_BE_DW
-)
-
 from .types import (
-	DW_Album, DW_Playlist
+	DW_Track, DW_Album, DW_Playlist
 )
 
 from .types.pipe_ext import (
 	Playlist as PIPE_Playlist
 )
 
+from .dw_helpers.dws import F_BE_DW
+from .dw_helpers.track import G_DW_Track
+from .dw_helpers.album import G_DW_Album
+from .dw_helpers.playlist import G_DW_Playlist
+
 from .dw_helpers import (
-	helper_album, helper_playlist
+	Helper_Track, Helper_Album, Helper_Playlist
 )
 
 
@@ -79,12 +80,31 @@ def get_be_dw(backend_dw: DECRYPTOR) -> F_BE_DW:
 	return be_dw
 
 
+def dw_track_seq(
+	medias: Medias,
+	track_info: DW_Track,
+	conf: CONF,
+	dir_name: str,
+) -> G_DW_Track:
+
+	func_be_dw = get_be_dw(conf.DECRYPTOR)
+	media = medias.medias[0]
+
+	yield Helper_Track(
+		track_info = track_info,
+		media = media,
+		conf = conf,
+		dir_name = dir_name,
+		func_be_dw = func_be_dw
+	)
+
+
 def dw_album_seq(
 	medias: Medias,
 	album_info: DW_Album,
 	conf: CONF,
 	dir_name: str
-) -> G_Track_Out:
+) -> G_DW_Album:
 
 	p_bar = get_pbar(medias, album_info.gw_tracks_info)
 	dw_helper = get_be_dw(conf.DECRYPTOR)
@@ -94,7 +114,7 @@ def dw_album_seq(
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
-		yield from helper_album(
+		yield Helper_Album(
 			gw_track_info = gw_track_info,
 			media = media,
 			conf = conf,
@@ -124,7 +144,7 @@ def dw_album_thread(
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
-		helper = helper_album(
+		helper = Helper_Album(
 			gw_track_info = gw_track_info,
 			media = media,
 			conf = conf,
@@ -162,7 +182,7 @@ def dw_playlist_seq(
 	tracks: list[Track],
 	conf: CONF,
 	dir_name: str
-) -> G_DW_Track:
+) -> G_DW_Playlist:
 
 	p_bar = get_pbar(medias, tracks)
 	dw_helper = get_be_dw(conf.DECRYPTOR)
@@ -172,7 +192,7 @@ def dw_playlist_seq(
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
-		yield from helper_playlist(
+		yield Helper_Playlist(
 			gw_track_info = gw_track_info,
 			media = media,
 			conf = conf,
@@ -204,7 +224,7 @@ def dw_playlist_thread(
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
-		helper = helper_playlist(
+		helper = Helper_Playlist(
 			gw_track_info = gw_track_info,
 			media = media,
 			conf = conf,

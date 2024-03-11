@@ -4,8 +4,6 @@ from api_deezer_full import (
 
 from .logger import LOG
 from .config import CONF
-from .tagger import tagger_track
-from .dw_helpers import dw_helper
 
 from .dw_helpers.utils import (
 	create_dir, create_dir_w_track
@@ -16,8 +14,8 @@ from .utils import (
 )
 
 from .dw_utils import (
-	dw_album_seq, dw_album_thread,
-	dw_playlist_seq, dw_playlist_thread, get_be_dw
+	dw_track_seq, dw_album_seq, dw_album_thread,
+	dw_playlist_seq, dw_playlist_thread
 )
 
 from .graphql.queries import (
@@ -27,6 +25,7 @@ from .graphql.queries import (
 from .generators import (
 	G_Track, G_Album, G_Playlist
 )
+
 
 from .types import (
 	DW_Track, DW_Album, DW_Playlist
@@ -83,27 +82,14 @@ class DW(API_PIPE):
 			track_tokens = [track_token]
 		)
 
-		dw_media = media_infos.medias[0]
 		dir_name = create_dir_w_track(conf, gw_info)
-		helper = get_be_dw(conf.DECRYPTOR)
 
-		dw_track.dw_track = dw_helper(
-			track = gw_info,
-			media = dw_media,
+		yield from dw_track_seq(
+			medias = media_infos,
+			track_info = dw_track,
 			conf = conf,
-			dir_name = dir_name,
-			func_be_dw = helper
+			dir_name = dir_name
 		)
-
-		tagger_track(
-			gw_info = dw_track.gw_info,
-			track_out = dw_track.dw_track,
-			pipe_info = dw_track.pipe_info,
-			pipe_info_album = dw_track.pipe_info.album,
-			image_bytes = dw_track.image_bytes
-		)
-
-		yield dw_track.dw_track
 
 
 	def dw_album(

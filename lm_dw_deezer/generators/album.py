@@ -1,11 +1,10 @@
 # https://stackoverflow.com/questions/34073370/best-way-to-receive-the-return-value-from-a-python-generator
 
-from ..types import (
-	DW_Album, ITrack_Out
-)
 
-from ..types.aliases import (
-	G_Album, G_Track_Out
+from ..types import DW_Album
+
+from ..dw_helpers.album import (
+	G_Album, G_DW_Album, Helper_Album
 )
 
 
@@ -19,14 +18,15 @@ class Gen_Album:
 		self.album: DW_Album = next(self.__gen) #pyright: ignore [reportArgumentType]
 
 
-	def dw(self) -> ITrack_Out:
-		return next(self.__gen) #pyright: ignore [reportReturnType]
+	def next(self) -> Helper_Album:
+		return next(self.__gen) #pyright: ignore [reportArgumentType]
 
 
-	def __iter__(self) -> G_Track_Out:
+	def __iter__(self) -> G_DW_Album:
 		yield from self.__gen #pyright: ignore [reportReturnType]
 
 
 	def wait(self) -> None:
-		for _ in self.__gen:
-			...
+		album: Helper_Album
+		for album in self.__gen: #pyright: ignore [reportAssignmentType]
+			album.dw()

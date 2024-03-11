@@ -1,10 +1,11 @@
 from os.path import isfile
 
+from collections.abc import Callable
+
 from api_deezer_full.gw.types import Track
 from api_deezer_full.media.types import Media
 
 from ..config import CONF
-from ..types.aliases import F_BE_DW
 from ..decrypt.utils import gen_song_hash
 from ..exceptions.no_stream_data import No_Stream_Data
 
@@ -17,6 +18,11 @@ from .utils import get_fn
 from .utils_infos import (
 	LEGACY_MEDIA_FORMAT, LEGACY_MEDIA_QUALITY
 )
+
+
+type F_BE_DW = Callable[
+	[str, str, str], None
+]
 
 
 def dw_helper(

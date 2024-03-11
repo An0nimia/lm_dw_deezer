@@ -12,7 +12,7 @@ from functools import update_wrapper
 
 def is_active(func: Any):
 	def inner(cls: LOG, msg: str) -> None:
-		if cls.output:
+		if False:
 			return func(cls, msg)
 	
 		return
