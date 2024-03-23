@@ -8,7 +8,7 @@ from ..tagger import tagger_track
 from ..types.pipe_ext import Track as PIPE_Track
 
 from ..types import (
-	DW_Track, DW_Playlist
+	DW_Track, DW_Playlist, ITrack_Out
 )
 
 from .dws import (
@@ -41,7 +41,19 @@ class Helper_Playlist:
 		self.func_be_dw = func_be_dw
 
 
-	def dw_no_tag(self) -> DW_Track:
+	def just_metadata(self) -> None:
+		self.dw_track = DW_Track(
+			image = self.conf.TRACK_IMAGE,
+			gw_info = self.gw_track_info,
+			pipe_info = self.pipe_track_info
+		)
+
+		self.dw_tracks.append(self.dw_track)
+
+
+	def dw_no_tag(self) -> ITrack_Out:
+		self.just_metadata()
+
 		track_out = dw_helper(
 			track = self.gw_track_info,
 			media = self.media,
@@ -50,27 +62,19 @@ class Helper_Playlist:
 			func_be_dw = self.func_be_dw
 		)
 
-		dw_track = DW_Track(
-			image = self.conf.TRACK_IMAGE,
-			dw_track = track_out,
-			gw_info = self.gw_track_info,
-			pipe_info = self.pipe_track_info
-		)
+		self.dw_track.dw_track = track_out
 
-		self.dw_tracks.append(dw_track)
-
-		return dw_track
+		return track_out
 
 
-	def dw(self) -> DW_Track:
-		dw_track = self.dw_no_tag()
+	def dw(self) -> ITrack_Out:
+		track_out = self.dw_no_tag()
+		pipe_track: PIPE_Track = self.dw_track.pipe_info #pyright: ignore [reportAssignmentType]
 
 		tagger_track(
-			gw_info = dw_track.gw_info,
-			track_out = dw_track.dw_track,
-			pipe_info = dw_track.pipe_info,
-			pipe_info_album = dw_track.pipe_info.album,
-			image_bytes = dw_track.image_bytes
+			dw_track = self.dw_track,
+			pipe_info_album = pipe_track.album,
+			image_bytes = self.dw_track.image_bytes
 		)
 
-		return dw_track
+		return track_out

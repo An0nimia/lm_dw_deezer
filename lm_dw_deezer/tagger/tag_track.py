@@ -1,16 +1,12 @@
 
-from api_deezer_full.gw.types.track import (
-	Track as GW_Track,
-	DEFAULT_DATE
-)
+from api_deezer_full.gw.types.track import DEFAULT_DATE
 
 from ..logger import LOG
 
-from ..types import Track_Out
+from ..types.pipe_ext import Base_Album as PIPE_Base_Album
 
-from ..types.pipe_ext import (
-	Base_Track as PIPE_Track,
-	Base_Album as PIPE_Album
+from ..types import (
+	Track_Out, DW_Track
 )
 
 from .tag_mp3 import TAG_MP3
@@ -19,38 +15,33 @@ from .helpers import generate_rgain
 
 
 def tagger_track(
-	gw_info: GW_Track,
-	track_out: Track_Out | None,
-	pipe_info: PIPE_Track,
-	pipe_info_album: PIPE_Album | None,
-	image_bytes: bytes,
+	pipe_info_album: PIPE_Base_Album | None,
+	dw_track: DW_Track,
+	image_bytes: bytes
 ) -> None:
 
-	if track_out and pipe_info_album:
-		LOG.info(f'Adding tag to \'{gw_info.title}\'')
+	if dw_track.dw_track and pipe_info_album:
+		LOG.info(f'Adding tag to \'{dw_track.gw_info.title}\'')
 
 		tag(
-			gw_track_info = gw_info,
-			pipe_track_info = pipe_info,
+			dw_track = dw_track,
 			pipe_album_info = pipe_info_album,
-			track_out = track_out,
 			image_bytes = image_bytes,
 		)
 
-		LOG.info(f'Successful downloaded \'{gw_info.title}\' at \'{track_out.path}\'')
+		LOG.info(f'Successful downloaded \'{dw_track.gw_info.title}\' at \'{dw_track.dw_track.path}\'')
 	else:
-		LOG.warning(f'Track \'{gw_info.title}\' - \'{gw_info.artists[0].name}\' cannot be downloaded')
+		LOG.warning(f'Track \'{dw_track.gw_info.title}\' - \'{dw_track.gw_info.artists[0].name}\' cannot be downloaded')
 
 
 def tag(
-	gw_track_info: GW_Track,
-	pipe_track_info: PIPE_Track,
-	pipe_album_info: PIPE_Album,
-	track_out: Track_Out,
-	image_bytes: bytes,
+	dw_track: DW_Track,
+	pipe_album_info: PIPE_Base_Album,
+	image_bytes: bytes
 ) -> None:
 
 	tagger = TAG_MP3
+	track_out: Track_Out = dw_track.dw_track #pyright: ignore [reportAssignmentType]
 
 	if track_out.quality == 'FLAC':
 		tagger = TAG_FLAC
@@ -59,15 +50,15 @@ def tag(
 		tagger.add_image(image_bytes)
 		tagger.add_comment()
 
-		if gw_track_info.gain:
+		if dw_track.gw_info.gain:
 			tagger.add_gain(
-				generate_rgain(gw_track_info.gain)
+				generate_rgain(dw_track.gw_info.gain)
 			)
 
 		if track_out.quality == 'FLAC':
-			tagger.add_audio_length(-gw_track_info.duration)
+			tagger.add_audio_length(dw_track.gw_info.duration)
 
-		lyrics = pipe_track_info.lyrics
+		lyrics = dw_track.pipe_info.lyrics
 
 		if lyrics:
 			if lyrics.writers:
@@ -81,25 +72,25 @@ def tag(
 			else:
 				tagger.add_lyric_unsync(lyrics.text)
 
-		tagger.add_album_name(gw_track_info.album_title)
+		tagger.add_album_name(dw_track.gw_info.album_title)
 
-		if pipe_track_info.bpm:
-			tagger.add_bpm(pipe_track_info.bpm)
+		if dw_track.pipe_info.bpm:
+			tagger.add_bpm(dw_track.pipe_info.bpm)
 
-		tagger.add_contributors(gw_track_info.contributors)
-		tagger.add_composers(gw_track_info.contributors)
+		tagger.add_contributors(dw_track.gw_info.contributors)
+		tagger.add_composers(dw_track.gw_info.contributors)
 
-		if gw_track_info.physical_release_date != DEFAULT_DATE: # Track from playlist doesn't have this JSON in their field
-			tagger.add_date_original_release(gw_track_info.physical_release_date)
+		if dw_track.gw_info.physical_release_date != DEFAULT_DATE: # Track from playlist doesn't have this JSON in their field
+			tagger.add_date_original_release(dw_track.gw_info.physical_release_date)
 
-		if gw_track_info.digital_release_date != DEFAULT_DATE:
-			tagger.add_date_release(gw_track_info.digital_release_date)
+		if dw_track.gw_info.digital_release_date != DEFAULT_DATE:
+			tagger.add_date_release(dw_track.gw_info.digital_release_date)
 
 		tagger.add_encoder()
-		tagger.add_title(gw_track_info.title)
-		tagger.add_isrc(gw_track_info.ISRC)
+		tagger.add_title(dw_track.gw_info.title)
+		tagger.add_isrc(dw_track.gw_info.ISRC)
 
-		tagger.add_artists(gw_track_info.artists)
+		tagger.add_artists(dw_track.gw_info.artists)
 
 		if pipe_album_info.label:
 			tagger.add_producer(pipe_album_info.label)
@@ -107,5 +98,5 @@ def tag(
 		if pipe_album_info.producer:
 			tagger.add_publisher(pipe_album_info.producer)
 
-		tagger.add_track_number(gw_track_info.track_number)
-		tagger.add_disk_number(gw_track_info.disk_number, pipe_album_info.disks_count)
+		tagger.add_track_number(dw_track.gw_info.track_number)
+		tagger.add_disk_number(dw_track.gw_info.disk_number, pipe_album_info.disks_count)

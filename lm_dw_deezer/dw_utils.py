@@ -32,10 +32,6 @@ from .types import (
 	DW_Track, DW_Album, DW_Playlist
 )
 
-from .types.pipe_ext import (
-	Playlist as PIPE_Playlist
-)
-
 from .dw_helpers.dws import F_BE_DW
 from .dw_helpers.track import G_DW_Track
 from .dw_helpers.album import G_DW_Album
@@ -82,7 +78,7 @@ def get_be_dw(backend_dw: DECRYPTOR) -> F_BE_DW:
 
 def dw_track_seq(
 	medias: Medias,
-	track_info: DW_Track,
+	dw_track: DW_Track,
 	conf: CONF,
 	dir_name: str,
 ) -> G_DW_Track:
@@ -91,7 +87,7 @@ def dw_track_seq(
 	media = medias.medias[0]
 
 	yield Helper_Track(
-		track_info = track_info,
+		dw_track = dw_track,
 		media = media,
 		conf = conf,
 		dir_name = dir_name,
@@ -178,17 +174,15 @@ def dw_album_thread(
 def dw_playlist_seq(
 	medias: Medias,
 	playlist_info: DW_Playlist,
-	pipe_info: PIPE_Playlist,
-	tracks: list[Track],
 	conf: CONF,
 	dir_name: str
 ) -> G_DW_Playlist:
 
-	p_bar = get_pbar(medias, tracks)
+	p_bar = get_pbar(medias, playlist_info.gw_tracks_info)
 	dw_helper = get_be_dw(conf.DECRYPTOR)
 
 	for (media, gw_track_info), pipe_track_info in zip(
-		p_bar, pipe_info.tracks
+		p_bar, playlist_info.pipe_info.tracks
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
@@ -206,8 +200,6 @@ def dw_playlist_seq(
 def dw_playlist_thread(
 	medias: Medias,
 	playlist_info: DW_Playlist,
-	pipe_info: PIPE_Playlist,
-	tracks: list[Track],
 	conf: CONF,
 	dir_name: str
 ) -> None:
@@ -216,11 +208,11 @@ def dw_playlist_thread(
 	threads: list[DW_Medjay] = []
 	workers = thread_func.WORKERS
 	event = Event()
-	p_bar = get_pbar(medias, tracks)
+	p_bar = get_pbar(medias, playlist_info.gw_tracks_info)
 	dw_helper = get_be_dw(conf.DECRYPTOR)
 
 	for (media, gw_track_info), pipe_track_info in zip(
-		p_bar, pipe_info.tracks
+		p_bar, playlist_info.pipe_info.tracks
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 

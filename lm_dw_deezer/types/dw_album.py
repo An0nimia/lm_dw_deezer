@@ -7,7 +7,7 @@ from api_deezer_full.gw.types import Track as GW_Track
 from ..config.image import Image
 
 from .utils import get_image
-from .track_out import ITracks_Out
+from .dw_track import DW_Tracks
 from .pipe_ext import Album as PIPE_Album
 
 
@@ -16,7 +16,7 @@ class DW_Album:
 	image: Image
 	gw_tracks_info: list[GW_Track]
 	pipe_info: PIPE_Album
-	dw_tracks: ITracks_Out = field(default_factory = list)
+	dw_tracks: DW_Tracks = field(default_factory = list)
 	zip_path: str | None = None
 
 	image_bytes: bytes = field(

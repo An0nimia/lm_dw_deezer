@@ -8,7 +8,8 @@ from ..config.image import Image
 
 from .utils import get_image
 from .track_out import ITrack_Out
-from .pipe_ext import Track as PIPE_Track
+
+from .pipe_ext import Base_Track as PIPE_Base_Track
 
 
 type DW_Tracks = list[DW_Track]
@@ -18,7 +19,7 @@ type DW_Tracks = list[DW_Track]
 class DW_Track:
 	image: Image
 	gw_info: GW_Track
-	pipe_info: PIPE_Track
+	pipe_info: PIPE_Base_Track
 	dw_track: ITrack_Out = None
 
 	image_bytes: bytes = field(

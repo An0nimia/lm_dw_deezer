@@ -86,7 +86,7 @@ class DW(API_PIPE):
 
 		yield from dw_track_seq(
 			medias = media_infos,
-			track_info = dw_track,
+			dw_track = dw_track,
 			conf = conf,
 			dir_name = dir_name
 		)
@@ -177,7 +177,10 @@ class DW(API_PIPE):
 
 		pipe_info = PIPE_Playlist.model_validate(pipe_JSON)
 
-		playlist_info = DW_Playlist(pipe_info)
+		playlist_info = DW_Playlist(
+			pipe_info = pipe_info,
+			gw_tracks_info = merge_track_data(pipe_info.tracks, playlist_data.tracks)
+		)
 
 		yield playlist_info
 
@@ -197,15 +200,12 @@ class DW(API_PIPE):
 			track_tokens = tracks_token
 		)
 
-		tracks = merge_track_data(pipe_info.tracks, playlist_data.tracks)		
 		dir_name = create_dir(conf, pipe_info.title)
 
 		if not conf.THREAD_FUNC:
 			yield from dw_playlist_seq(
 				medias = medias,
 				playlist_info = playlist_info,
-				pipe_info = pipe_info,
-				tracks = tracks,
 				conf = conf,
 				dir_name = dir_name
 			)
@@ -213,8 +213,6 @@ class DW(API_PIPE):
 			dw_playlist_thread(
 				medias = medias,
 				playlist_info = playlist_info,
-				pipe_info = pipe_info,
-				tracks = tracks,
 				conf = conf,
 				dir_name = dir_name
 			)

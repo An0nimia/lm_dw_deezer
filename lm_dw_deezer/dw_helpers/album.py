@@ -8,7 +8,7 @@ from ..tagger import tagger_track
 from ..types.pipe_ext import Album_Track as PIPE_Album_Track
 
 from ..types import (
-	DW_Album, ITrack_Out
+	DW_Album, DW_Track, ITrack_Out
 )
 
 from .dws import (
@@ -41,7 +41,19 @@ class Helper_Album:
 		self.func_be_dw = func_be_dw
 
 
+	def just_metadata(self) -> None:
+		self.dw_track = DW_Track(
+			image = self.conf.TRACK_IMAGE,
+			gw_info = self.gw_track_info,
+			pipe_info = self.pipe_track_info
+		)
+
+		self.album_info.dw_tracks.append(self.dw_track)
+
+
 	def dw_no_tag(self) -> ITrack_Out:
+		self.just_metadata()
+
 		track_out = dw_helper(
 			track = self.gw_track_info,
 			media = self.media,
@@ -50,7 +62,7 @@ class Helper_Album:
 			func_be_dw = self.func_be_dw
 		)
 
-		self.album_info.dw_tracks.append(track_out)
+		self.dw_track.dw_track = track_out
 
 		return track_out
 
@@ -59,10 +71,8 @@ class Helper_Album:
 		track_out = self.dw_no_tag()
 
 		tagger_track(
-			gw_info = self.gw_track_info,
-			track_out = track_out,
-			pipe_info = self.pipe_track_info,
 			pipe_info_album = self.album_info.pipe_info,
+			dw_track = self.dw_track,
 			image_bytes = self.album_info.image_bytes
 		)
 
