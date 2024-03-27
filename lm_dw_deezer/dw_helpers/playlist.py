@@ -5,6 +5,7 @@ from api_deezer_full.media.types import Media
 
 from ..config import CONF
 from ..tagger import tagger_track
+from ..types.enums import DW_STATUS
 from ..types.pipe_ext import Track as PIPE_Track
 
 from ..types import (
@@ -27,8 +28,7 @@ class Helper_Playlist:
 		media: Media,
 		conf: CONF,
 		pipe_track_info: PIPE_Track,
-		dw_tracks: list[DW_Track],
-		dir_name: str,
+		playlist_info: DW_Playlist,
 		func_be_dw: F_BE_DW
 	) -> None:
 
@@ -36,19 +36,20 @@ class Helper_Playlist:
 		self.media = media
 		self.conf = conf
 		self.pipe_track_info = pipe_track_info
-		self.dir_name = dir_name
-		self.dw_tracks = dw_tracks
 		self.func_be_dw = func_be_dw
+		self.playlist_info = playlist_info
 
 
-	def just_metadata(self) -> None:
+	def just_metadata(self) -> DW_Track:
 		self.dw_track = DW_Track(
 			image = self.conf.TRACK_IMAGE,
 			gw_info = self.gw_track_info,
 			pipe_info = self.pipe_track_info
 		)
 
-		self.dw_tracks.append(self.dw_track)
+		self.playlist_info.dw_tracks.append(self.dw_track)
+
+		return self.dw_track
 
 
 	def dw_no_tag(self) -> ITrack_Out:
@@ -58,9 +59,14 @@ class Helper_Playlist:
 			track = self.gw_track_info,
 			media = self.media,
 			conf = self.conf,
-			dir_name = self.dir_name,
+			dir_name = self.playlist_info.dir_name,
 			func_be_dw = self.func_be_dw
 		)
+
+		if track_out:
+			self.playlist_info.helpers[self.gw_track_info.id]['status'] = DW_STATUS.DOWNLOADED
+		else:
+			self.playlist_info.helpers[self.gw_track_info.id]['status'] = DW_STATUS.UN_DOWNLABLE
 
 		self.dw_track.dw_track = track_out
 

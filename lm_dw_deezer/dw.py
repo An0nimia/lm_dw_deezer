@@ -9,9 +9,7 @@ from .dw_helpers.utils import (
 	create_dir, create_dir_w_track
 )
 
-from .utils import (
-	merge_track_data, make_archive
-)
+from .utils import merge_track_data
 
 from .dw_utils import (
 	dw_track_seq, dw_album_seq, dw_album_thread,
@@ -113,7 +111,8 @@ class DW(API_PIPE):
 		album_info = DW_Album(
 			image = conf.TRACK_IMAGE,
 			gw_tracks_info = gw_info.tracks,
-			pipe_info = pipe_info
+			pipe_info = pipe_info,
+			dir_name = create_dir_w_track(conf, gw_info.tracks[0])
 		)
 
 		yield album_info
@@ -136,29 +135,21 @@ class DW(API_PIPE):
 
 		LOG.info('GOT track sources')
 
-		dir_name = create_dir_w_track(conf, gw_info.tracks[0])
-
 		if not conf.THREAD_FUNC:
 			yield from dw_album_seq(
 				medias = medias,
 				album_info = album_info,
-				conf = conf,
-				dir_name = dir_name
+				conf = conf
 			)
 		else:
 			dw_album_thread(
 				medias = medias,
 				album_info = album_info,
-				conf = conf,
-				dir_name = dir_name
+				conf = conf
 			)
 
 		if conf.ARCHIVE:
-			album_info.zip_path = make_archive(
-				type_arc = conf.ARCHIVE,
-				dir_name = dir_name,
-				dw_tracks = album_info
-			)
+			album_info.create_archive(conf.ARCHIVE)
 
 
 	def dw_playlist(
@@ -179,7 +170,8 @@ class DW(API_PIPE):
 
 		playlist_info = DW_Playlist(
 			pipe_info = pipe_info,
-			gw_tracks_info = merge_track_data(pipe_info.tracks, playlist_data.tracks)
+			gw_tracks_info = merge_track_data(pipe_info.tracks, playlist_data.tracks),
+			dir_name = create_dir(conf, pipe_info.title)
 		)
 
 		yield playlist_info
@@ -200,26 +192,18 @@ class DW(API_PIPE):
 			track_tokens = tracks_token
 		)
 
-		dir_name = create_dir(conf, pipe_info.title)
-
 		if not conf.THREAD_FUNC:
 			yield from dw_playlist_seq(
 				medias = medias,
 				playlist_info = playlist_info,
-				conf = conf,
-				dir_name = dir_name
+				conf = conf
 			)
 		else:
 			dw_playlist_thread(
 				medias = medias,
 				playlist_info = playlist_info,
-				conf = conf,
-				dir_name = dir_name
+				conf = conf
 			)
 
 		if conf.ARCHIVE:
-			playlist_info.zip_path = make_archive(
-				type_arc = conf.ARCHIVE,
-				dir_name = dir_name,
-				dw_tracks = playlist_info
-			)
+			playlist_info.create_archive(conf.ARCHIVE)

@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 type F_THREAD = Callable[
-	[Event, 'Helper_Album | Helper_Playlist'], None
+	[Event, Helper_Album | Helper_Playlist], None
 ]
 
 @dataclass

@@ -28,6 +28,9 @@ from .config import (
 	CONF, Thread_Func
 )
 
+from .types.enums import DW_STATUS
+from .types.utils import wait_threads
+
 from .types import (
 	DW_Track, DW_Album, DW_Playlist
 )
@@ -56,13 +59,6 @@ def get_pbar(medias: Medias, tracks: list[Track]):
 	return p_bar
 
 
-def wait_threads(threads: list[DW_Medjay]) -> None:
-	for thread in threads:
-		thread.wait()
-
-	threads.clear()
-
-
 def get_be_dw(backend_dw: DECRYPTOR) -> F_BE_DW:
 	match backend_dw:
 		case DECRYPTOR.RUST:
@@ -80,7 +76,7 @@ def dw_track_seq(
 	medias: Medias,
 	dw_track: DW_Track,
 	conf: CONF,
-	dir_name: str,
+	dir_name: str
 ) -> G_DW_Track:
 
 	func_be_dw = get_be_dw(conf.DECRYPTOR)
@@ -98,8 +94,7 @@ def dw_track_seq(
 def dw_album_seq(
 	medias: Medias,
 	album_info: DW_Album,
-	conf: CONF,
-	dir_name: str
+	conf: CONF
 ) -> G_DW_Album:
 
 	p_bar = get_pbar(medias, album_info.gw_tracks_info)
@@ -110,22 +105,27 @@ def dw_album_seq(
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
-		yield Helper_Album(
+		helper_album = Helper_Album(
 			gw_track_info = gw_track_info,
 			media = media,
 			conf = conf,
 			pipe_track_info = pipe_track_info,
-			dir_name = dir_name,
 			album_info = album_info,
 			func_be_dw = dw_helper
 		)
+
+		album_info.statuses[gw_track_info.id] = {
+			'helper': helper_album,
+			'status': DW_STATUS.NOT_DOWNLOADED
+		}
+
+		yield helper_album
 
 
 def dw_album_thread(
 	medias: Medias,
 	album_info: DW_Album,
-	conf: CONF,
-	dir_name: str,
+	conf: CONF
 ) -> None:
 
 	thread_func: Thread_Func = conf.THREAD_FUNC #pyright: ignore [reportAssignmentType]
@@ -140,15 +140,19 @@ def dw_album_thread(
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
-		helper = Helper_Album(
+		helper_album = Helper_Album(
 			gw_track_info = gw_track_info,
 			media = media,
 			conf = conf,
 			pipe_track_info = pipe_track_info,
-			dir_name = dir_name,
 			album_info = album_info,
 			func_be_dw = dw_helper
 		)
+
+		album_info.statuses[gw_track_info.id] = {
+			'helper': helper_album,
+			'status': DW_STATUS.NOT_DOWNLOADED
+		}
 
 		if workers == 0:
 			wait_threads(threads)
@@ -160,7 +164,7 @@ def dw_album_thread(
 
 		c_thread = DW_Medjay(
 			target = thread_func.func,
-			args = (helper,),
+			args = (helper_album,),
 			event = event
 		)
 
@@ -174,8 +178,7 @@ def dw_album_thread(
 def dw_playlist_seq(
 	medias: Medias,
 	playlist_info: DW_Playlist,
-	conf: CONF,
-	dir_name: str
+	conf: CONF
 ) -> G_DW_Playlist:
 
 	p_bar = get_pbar(medias, playlist_info.gw_tracks_info)
@@ -191,8 +194,7 @@ def dw_playlist_seq(
 			media = media,
 			conf = conf,
 			pipe_track_info = pipe_track_info,
-			dw_tracks = playlist_info.dw_tracks,
-			dir_name = dir_name,
+			playlist_info = playlist_info,
 			func_be_dw = dw_helper
 		)
 
@@ -200,8 +202,7 @@ def dw_playlist_seq(
 def dw_playlist_thread(
 	medias: Medias,
 	playlist_info: DW_Playlist,
-	conf: CONF,
-	dir_name: str
+	conf: CONF
 ) -> None:
 
 	thread_func: Thread_Func = conf.THREAD_FUNC #pyright: ignore [reportAssignmentType]
@@ -221,8 +222,7 @@ def dw_playlist_thread(
 			media = media,
 			conf = conf,
 			pipe_track_info = pipe_track_info,
-			dw_tracks = playlist_info.dw_tracks,
-			dir_name = dir_name,
+			playlist_info = playlist_info,
 			func_be_dw = dw_helper
 		)
 

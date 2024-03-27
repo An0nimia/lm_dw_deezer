@@ -1,16 +1,20 @@
-from typing import Any
+from __future__ import annotations
+
+from typing import (
+	Any, TYPE_CHECKING
+)
 
 from api_deezer_full.gw.types.track import (
 	Track, Base_Track, DEFAULT_DATE
 )
 
+if TYPE_CHECKING:
+	from .types import DW_Tracks
+
 from .config.enums import COMPRESSION
 
-from .types import (
-	DW_Album, DW_Playlist
-)
 from .types.pipe_ext import (
-	Playlist_Tracks, Playlist_Track,
+	Playlist_Tracks, Playlist_Track
 )
 
 from .compressions import (
@@ -61,7 +65,7 @@ def merge_track_data(
 def make_archive(
 	type_arc: COMPRESSION,
 	dir_name: str,
-	dw_tracks: DW_Album | DW_Playlist
+	dw_tracks: DW_Tracks
 ) -> str:
 
 	match type_arc:

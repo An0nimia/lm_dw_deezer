@@ -1,10 +1,18 @@
 from requests import get as req_get
 
+from ..medjays import DW_Medjay
 from ..config.image import Image
 
 from .data_utils import (
 	DEFAULT_IMAGE_BYTES, DEFAULT_URL_TEMPLATE, DEFAULT_URL_IMAGE
 )
+
+
+def wait_threads(threads: list[DW_Medjay]) -> None:
+	for thread in threads:
+		thread.wait()
+
+	threads.clear()
 
 
 def get_image_url(picture_md5: str, image: Image) -> str:

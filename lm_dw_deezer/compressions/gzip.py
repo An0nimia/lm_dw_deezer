@@ -1,17 +1,20 @@
+from __future__ import annotations
+
 from pathlib import Path
 
 from tarfile import open as TAR
 
-from ..types import (
-	DW_Album, DW_Playlist
-)
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+	from ..types import DW_Tracks
 
 from .utils import make_archive
 
 
 def gzip_compress(
 	dir_name: str,
-	dw_tracks: DW_Album | DW_Playlist
+	dw_tracks: DW_Tracks
 ) -> str:
 
 	gz_name = Path(dir_name).name
