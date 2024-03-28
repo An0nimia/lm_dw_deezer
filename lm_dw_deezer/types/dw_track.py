@@ -6,9 +6,8 @@ from api_deezer_full.gw.types import Track as GW_Track
 
 from ..config.image import Image
 
-from .utils import get_image
 from .track_out import ITrack_Out
-
+from .utils_image import get_image
 from .pipe_ext import Base_Track as PIPE_Base_Track
 
 

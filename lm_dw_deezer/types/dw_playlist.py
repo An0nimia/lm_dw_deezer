@@ -16,7 +16,6 @@ from ..medjays import (
 	DW_Medjay, Event
 )
 
-from ..utils import make_archive
 from ..config import Thread_Func
 from ..config.enums import COMPRESSION
 
@@ -25,7 +24,11 @@ if TYPE_CHECKING:
 
 from .enums import DW_STATUS
 from .dw_track import DW_Tracks
-from .utils import wait_threads
+
+from .utils import (
+	wait_threads, make_archive
+)
+
 from .data_utils import DEFAULT_URL_IMAGE
 from .pipe_ext import Playlist as PIPE_Playlist
 

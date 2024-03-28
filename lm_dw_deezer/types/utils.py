@@ -1,11 +1,11 @@
-from requests import get as req_get
-
 from ..medjays import DW_Medjay
-from ..config.image import Image
+from ..config.enums import COMPRESSION
 
-from .data_utils import (
-	DEFAULT_IMAGE_BYTES, DEFAULT_URL_TEMPLATE, DEFAULT_URL_IMAGE
+from ..compressions import (
+	zip_compress, gzip_compress, zstd_compress
 )
+
+from .dw_track import DW_Tracks
 
 
 def wait_threads(threads: list[DW_Medjay]) -> None:
@@ -15,25 +15,18 @@ def wait_threads(threads: list[DW_Medjay]) -> None:
 	threads.clear()
 
 
-def get_image_url(picture_md5: str, image: Image) -> str:
-	cover_url = DEFAULT_URL_TEMPLATE.format(
-		picture_md5 = picture_md5,
-		width = image.width,
-		height = image.height
-	)
+def make_archive(
+	type_arc: COMPRESSION,
+	dir_name: str,
+	dw_tracks: DW_Tracks
+) -> str:
 
-	return cover_url
+	match type_arc:
+		case COMPRESSION.ZIP:
+			func = zip_compress
+		case COMPRESSION.GZIP:
+			func = gzip_compress
+		case COMPRESSION.ZSTD:
+			func = zstd_compress
 
-
-def get_image(picture_md5: str, image: Image) -> tuple[bytes, str]:
-	cover_url = DEFAULT_URL_IMAGE
-
-	if picture_md5:
-		cover_url = get_image_url(picture_md5, image)
-
-		with req_get(cover_url, stream = True) as resp:
-			image_bytes = resp.content
-	else:
-		image_bytes = DEFAULT_IMAGE_BYTES
-
-	return image_bytes, cover_url
+	return func(dir_name, dw_tracks)

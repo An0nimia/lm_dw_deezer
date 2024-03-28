@@ -10,7 +10,6 @@ from dataclasses import (
 
 from api_deezer_full.gw.types import Track as GW_Track
 
-from ..utils import make_archive
 from ..config.enums import COMPRESSION
 
 from ..medjays import (
@@ -26,10 +25,11 @@ if TYPE_CHECKING:
 
 from .enums import DW_STATUS
 from .dw_track import DW_Tracks
+from .utils_image import get_image
 from .pipe_ext import Album as PIPE_Album
 
 from .utils import (
-	get_image, wait_threads
+	wait_threads, make_archive
 )
 
 

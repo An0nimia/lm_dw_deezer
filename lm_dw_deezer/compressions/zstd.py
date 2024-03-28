@@ -1,15 +1,10 @@
-from __future__ import annotations
-
 from pathlib import Path
 
 from tarfile import open as TAR
 
-from typing import TYPE_CHECKING
-
 from zstandard import ZstdCompressor
 
-if TYPE_CHECKING:
-	from ..types import DW_Tracks
+from ..types.dw_track import DW_Tracks
 
 from .utils import make_archive
 

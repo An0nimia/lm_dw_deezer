@@ -1,15 +1,10 @@
-from __future__ import annotations
-
 from pathlib import Path
-
-from typing import TYPE_CHECKING
 
 from zipfile import (
 	ZipFile, ZIP_DEFLATED
 )
 
-if TYPE_CHECKING:
-	from ..types import DW_Tracks
+from ..types.dw_track import DW_Tracks
 
 
 def __make_archive(

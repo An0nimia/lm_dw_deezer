@@ -64,9 +64,9 @@ class Helper_Playlist:
 		)
 
 		if track_out:
-			self.playlist_info.helpers[self.gw_track_info.id]['status'] = DW_STATUS.DOWNLOADED
+			self.playlist_info.statuses[self.gw_track_info.id]['status'] = DW_STATUS.DOWNLOADED
 		else:
-			self.playlist_info.helpers[self.gw_track_info.id]['status'] = DW_STATUS.UN_DOWNLABLE
+			self.playlist_info.statuses[self.gw_track_info.id]['status'] = DW_STATUS.UN_DOWNLABLE
 
 		self.dw_track.dw_track = track_out
 
