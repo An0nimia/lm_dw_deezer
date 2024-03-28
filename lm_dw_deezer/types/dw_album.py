@@ -69,11 +69,15 @@ class DW_Album:
 		return self.archive_path
 
 
-	def download_undownloaded(self) -> None:
-		for track in filter(
+	def get_undownloaded(self) -> filter[str]:
+		return filter(
 			lambda track: self.statuses[track]['status'] == DW_STATUS.NOT_DOWNLOADED,
 			self.statuses
-		):
+		)
+
+
+	def download_undownloaded(self) -> None:
+		for track in self.get_undownloaded():
 			self.statuses[track]['helper'].dw()
 
 
@@ -82,10 +86,7 @@ class DW_Album:
 		event = Event()
 		workers = thread_func.WORKERS
 
-		for track in filter(
-			lambda track: self.statuses[track]['status'] == DW_STATUS.NOT_DOWNLOADED,
-			self.statuses
-		):
+		for track in self.get_undownloaded():
 			self.statuses[track]['helper']
 
 			if workers == 0:
