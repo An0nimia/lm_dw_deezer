@@ -12,7 +12,12 @@ from requests import get as req_get
 
 from api_deezer_full.gw.types import Track as GW_Track
 
+from ..medjays import (
+	DW_Medjay, Event
+)
+
 from ..utils import make_archive
+from ..config import Thread_Func
 from ..config.enums import COMPRESSION
 
 if TYPE_CHECKING:
@@ -20,11 +25,12 @@ if TYPE_CHECKING:
 
 from .enums import DW_STATUS
 from .dw_track import DW_Tracks
+from .utils import wait_threads
 from .data_utils import DEFAULT_URL_IMAGE
 from .pipe_ext import Playlist as PIPE_Playlist
 
 
-class Helper(TypedDict):
+class STATUSES(TypedDict):
 	helper: Helper_Playlist
 	status: DW_STATUS
 
@@ -35,7 +41,7 @@ class DW_Playlist:
 	gw_tracks_info: list[GW_Track]
 	dir_name: str
 	dw_tracks: DW_Tracks = field(default_factory = list)
-	helpers: dict[str, Helper] = field(default_factory = dict)
+	statuses: dict[str, STATUSES] = field(default_factory = dict)
 	archive_path: str | None = None
 
 
@@ -63,3 +69,55 @@ class DW_Playlist:
 		)
 
 		return self.archive_path
+
+
+	def download_undownloaded(self) -> None:
+		for track in filter(
+			lambda track: self.statuses[track]['status'] == DW_STATUS.NOT_DOWNLOADED,
+			self.statuses
+		):
+			self.statuses[track]['helper'].dw()
+
+
+	def download_undownloaded_thread(self, thread_func: Thread_Func) -> None:
+		threads: list[DW_Medjay] = []
+		event = Event()
+		workers = thread_func.WORKERS
+
+		for track in filter(
+			lambda track: self.statuses[track]['status'] == DW_STATUS.NOT_DOWNLOADED,
+			self.statuses
+		):
+			self.statuses[track]['helper']
+
+			if workers == 0:
+				wait_threads(threads)
+
+				if event.is_set():
+					break
+
+				workers = thread_func.WORKERS
+
+			c_thread = DW_Medjay(
+				target = thread_func.func,
+				args = (self.statuses[track]['helper'],),
+				event = event
+			)
+
+			c_thread.start()
+			threads.append(c_thread)
+			workers -= 1
+
+		wait_threads(threads)
+
+
+	def download_undownloaded_w_archive(self, type_arc: COMPRESSION) -> str:
+		self.download_undownloaded()
+
+		return self.create_archive(type_arc)
+
+
+	def download_undownloaded_thread_w_archive(self, thread_func: Thread_Func, type_arc: COMPRESSION) -> str:
+		self.download_undownloaded_thread(thread_func)
+
+		return self.create_archive(type_arc)
