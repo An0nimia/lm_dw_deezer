@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from ..config import QUALITY
+
 
 type ITrack_Out = Track_Out | None
 
@@ -8,5 +10,5 @@ type ITrack_Out = Track_Out | None
 class Track_Out:
 	path: str
 	media_format: str
-	quality: str
-	quality_w: str
+	quality: QUALITY
+	quality_w: QUALITY

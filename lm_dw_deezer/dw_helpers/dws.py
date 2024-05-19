@@ -5,7 +5,10 @@ from collections.abc import Callable
 from api_deezer_full.gw.types import Track
 from api_deezer_full.media.types import Media
 
-from ..config import CONF
+from ..config import (
+	CONF, QUALITY
+)
+
 from ..decrypt.utils import gen_song_hash
 from ..exceptions.no_stream_data import No_Stream_Data
 
@@ -48,7 +51,7 @@ def dw_helper(
 		track_out = Track_Out(
 			path = path,
 			media_format = media.media_type,
-			quality = media.format,
+			quality = QUALITY.get_quality(media.format),
 			quality_w = conf.QUALITIES[0],
 		)
 
@@ -84,7 +87,7 @@ def dw_helper_legacy(
 	track_out = Track_Out(
 		path = path,
 		media_format = LEGACY_MEDIA_FORMAT,
-		quality = LEGACY_MEDIA_QUALITY,
+		quality = QUALITY.OK,
 		quality_w = conf.QUALITIES[0]
 	)
 
