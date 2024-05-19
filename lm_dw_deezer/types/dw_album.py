@@ -87,8 +87,6 @@ class DW_Album:
 		workers = thread_func.WORKERS
 
 		for track in self.get_undownloaded():
-			self.statuses[track]['helper']
-
 			if workers == 0:
 				wait_threads(threads)
 
