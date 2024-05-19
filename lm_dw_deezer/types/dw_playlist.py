@@ -92,8 +92,6 @@ class DW_Playlist:
 		workers = thread_func.WORKERS
 
 		for track in self.get_undownloaded():
-			self.statuses[track]['helper']
-
 			if workers == 0:
 				wait_threads(threads)
 
