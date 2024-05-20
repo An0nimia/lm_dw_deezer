@@ -189,7 +189,7 @@ def dw_playlist_seq(
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
-		yield Helper_Playlist(
+		helper_playlist = Helper_Playlist(
 			gw_track_info = gw_track_info,
 			media = media,
 			conf = conf,
@@ -197,6 +197,13 @@ def dw_playlist_seq(
 			playlist_info = playlist_info,
 			func_be_dw = dw_helper
 		)
+
+		playlist_info.statuses[gw_track_info.id] = {
+			'helper': helper_playlist,
+			'status': DW_STATUS.NOT_DOWNLOADED
+		}
+
+		yield helper_playlist
 
 
 def dw_playlist_thread(
@@ -217,7 +224,7 @@ def dw_playlist_thread(
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
-		helper = Helper_Playlist(
+		helper_playlist = Helper_Playlist(
 			gw_track_info = gw_track_info,
 			media = media,
 			conf = conf,
@@ -225,6 +232,11 @@ def dw_playlist_thread(
 			playlist_info = playlist_info,
 			func_be_dw = dw_helper
 		)
+
+		playlist_info.statuses[gw_track_info.id] = {
+			'helper': helper_playlist,
+			'status': DW_STATUS.NOT_DOWNLOADED
+		}
 
 		if workers == 0:
 			wait_threads(threads)
@@ -236,7 +248,7 @@ def dw_playlist_thread(
 
 		c_thread = DW_Medjay(
 			target = thread_func.func,
-			args = (helper,),
+			args = (helper_playlist,),
 			event = event
 		)
 

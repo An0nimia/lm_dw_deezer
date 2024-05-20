@@ -71,7 +71,7 @@ def get_album_query(id_album: str, n_tracks: int) -> dict[str, Any]:
 	return params
 
 
-def get_playlist_query(id_playlist: str, n_tracks: int) -> dict[str, Any]:
+def get_playlist_query(id_playlist: int | str, n_tracks: int) -> dict[str, Any]:
 	params = {
 		'operationName': 'get_playlist',
 		'variables': {

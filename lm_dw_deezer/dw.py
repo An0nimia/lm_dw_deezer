@@ -45,14 +45,14 @@ class DW(API_PIPE):
 
 	def dw_track(
 		self,
-		link: str,
+		id_track: int | str,
 		conf: CONF = CONF()
 	) -> G_Track:
 
-		LOG.info(f'Getting infos on \'{link}\'')
-		gw_info = self.gw_get_track(link)
+		LOG.info(f'Getting infos on \'{id_track}\'')
+		gw_info = self.gw_get_track(id_track)
 		LOG.debug(gw_info.__str__())
-		LOG.info(f'GOT infos on \'{link}\'')
+		LOG.info(f'GOT infos on \'{id_track}\'')
 		LOG.info(f'Looking out for sources for \'{gw_info.title}\'')
 
 		pipe_JSON = self.pipe_make_req(
@@ -92,14 +92,14 @@ class DW(API_PIPE):
 
 	def dw_album(
 		self,
-		link: str,
+		id_album: int | str,
 		conf: CONF = CONF()
 	) -> G_Album:
 
-		LOG.info(f'Getting infos on \'{link}\'')
-		gw_info = self.gw_get_album(link)
+		LOG.info(f'Getting infos on \'{id_album}\'')
+		gw_info = self.gw_get_album(id_album)
 		album_info = gw_info.tracks[0]
-		LOG.info(f'GOT infos on \'{link}\'')
+		LOG.info(f'GOT infos on \'{id_album}\'')
 		LOG.info(f'Looking out for tracks sources in \'{album_info.album_title}\'')
 
 		pipe_JSON = self.pipe_make_req(
@@ -154,16 +154,16 @@ class DW(API_PIPE):
 
 	def dw_playlist(
 		self,
-		link: str,
+		id_playlist: int | str,
 		conf: CONF = CONF()
 	) -> G_Playlist:
 
-		LOG.info(f'Getting infos on \'{link}\'')
-		playlist_data = self.gw_get_playlist(link)
-		LOG.info(f'GOT infos on \'{link}\'')
+		LOG.info(f'Getting infos on \'{id_playlist}\'')
+		playlist_data = self.gw_get_playlist(id_playlist)
+		LOG.info(f'GOT infos on \'{id_playlist}\'')
 
 		pipe_JSON = self.pipe_make_req(
-			get_playlist_query(playlist_data.id, playlist_data.total)
+			get_playlist_query(id_playlist, playlist_data.total)
 		)['data']['playlist']
 
 		pipe_info = PIPE_Playlist.model_validate(pipe_JSON)
