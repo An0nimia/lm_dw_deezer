@@ -1,59 +1,62 @@
 name: Publish to Docker Hub
 
 on:
-  push:
-    branches:
-      - "release"
-  workflow_dispatch:
+    push:
+        branches:
+            - release
+    workflow_dispatch:
 
 env:
-  DOCKER_TAG: an0nimia/lm_dw_deezer
+    DOCKER_TAG: an0nimia/lm_dw_deezer
+
+permissions:
+    contents: read
 
 jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    docker:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_LM_DW_DEEZER_USER }}
-          password: ${{ secrets.DOCKER_LM_DW_DEEZER_PASS }}
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKER_LM_DW_DEEZER_USER }}
+                  password: ${{ secrets.DOCKER_LM_DW_DEEZER_PASS }}
 
-      - name: Get version from pyproject.toml
-        id: getversion
-        run: |
-          pip install toml
-          echo "VERSION=$(python -c 'import toml; print(toml.load(open("pyproject.toml"))["tool"]["poetry"]["version"])')" >> "$GITHUB_ENV"
+            - name: Get version from pyproject.toml
+              id: getversion
+              run: |
+                  pip install toml
+                  echo "VERSION=$(python -c 'import toml; print(toml.load(open("pyproject.toml"))["tool"]["poetry"]["version"])')" >> "$GITHUB_ENV"
 
-      - name: Set DOCKER_TAG_VERSION
-        run: |
-          echo "DOCKER_TAG_VERSION=${{ env.DOCKER_TAG }}:$VERSION" >> "$GITHUB_ENV"
-          echo "DOCKER_TAG_VERSION_LATEST=${{ env.DOCKER_TAG }}:latest" >> "$GITHUB_ENV"
+            - name: Set DOCKER_TAG_VERSION
+              run: |
+                  echo "DOCKER_TAG_VERSION=${{ env.DOCKER_TAG }}:$VERSION" >> "$GITHUB_ENV"
+                  echo "DOCKER_TAG_VERSION_LATEST=${{ env.DOCKER_TAG }}:latest" >> "$GITHUB_ENV"
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
 
-      - name: Build and export to Docker
-        uses: docker/build-push-action@v5
-        with:
-          context: "{{defaultContext}}:docker"
-          load: true
-          tags: ${{ env.DOCKER_TAG_VERSION }}
+            - name: Build and export to Docker
+              uses: docker/build-push-action@v5
+              with:
+                  context: "{{defaultContext}}:docker"
+                  load: true
+                  tags: ${{ env.DOCKER_TAG_VERSION }}
 
-      - name: Test
-        run: |
-          docker run --rm $DOCKER_TAG_VERSION
+            - name: Test
+              run: |
+                  docker run --rm $DOCKER_TAG_VERSION
 
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: "{{defaultContext}}:docker"
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: ${{ env.DOCKER_TAG_VERSION }},${{ env.DOCKER_TAG_VERSION_LATEST }}
+            - name: Build and push
+              uses: docker/build-push-action@v5
+              with:
+                  context: "{{defaultContext}}:docker"
+                  platforms: linux/amd64,linux/arm64
+                  push: true
+                  tags: ${{ env.DOCKER_TAG_VERSION }},${{ env.DOCKER_TAG_VERSION_LATEST }}

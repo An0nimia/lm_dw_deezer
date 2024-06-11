@@ -58,7 +58,11 @@ class DW_Playlist:
 	def get_image(self) -> bytes:
 		image = self.get_image_url()
 
-		with req_get(image, stream = True) as resp:
+		with req_get(
+			image,
+			stream = True,
+			timeout = 30
+		) as resp:
 			image_bytes = resp.content
 
 		return image_bytes

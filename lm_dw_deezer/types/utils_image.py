@@ -23,7 +23,11 @@ def get_image(picture_md5: str, image: Image) -> tuple[bytes, str]:
 	if picture_md5:
 		cover_url = get_image_url(picture_md5, image)
 
-		with req_get(cover_url, stream = True) as resp:
+		with req_get(
+			cover_url,
+			stream = True,
+			timeout = 30
+		) as resp:
 			image_bytes = resp.content
 	else:
 		image_bytes = DEFAULT_IMAGE_BYTES
