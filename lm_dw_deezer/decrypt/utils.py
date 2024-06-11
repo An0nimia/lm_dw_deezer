@@ -13,6 +13,7 @@ from .utils_infos import (
 
 
 def __md5(data: str) -> str:
+	# trunk-ignore(bandit/B303)
 	h = MD5.new()
 
 	h.update(
@@ -36,6 +37,7 @@ def gen_song_hash(
 		]
 	)
 
+	# trunk-ignore(bandit/B303)
 	hashed = MD5.new(data).hexdigest().encode()
 
 	data = b'\xa4'.join(
@@ -71,6 +73,7 @@ def gen_blowfish_key(id_track: str) -> bytes:
 
 
 def dec_chunk(blowfish_key: bytes, data: bytes) -> bytes:
+	# trunk-ignore(bandit/B304)
 	blow = Blowfish.new( #pyright: ignore [reportUnknownMemberType]
 		key = blowfish_key,
 		mode = Blowfish.MODE_CBC,

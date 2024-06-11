@@ -14,13 +14,16 @@ class DW_Medjay(Thread):
 		self,
 		group: None = None,
 		target: Callable[..., object] | None = None,
-		event: Event = Event(),
+		event: Event | None = None,
 		name: str | None = None,
 		args: Iterable[Any] = (),
 		kwargs: Mapping[str, Any] | None = None,
 		*,
 		daemon: bool | None = None
 	) -> None:
+
+		if event is None:
+			event = Event()
 
 		self.__target = target
 		self.__args = args

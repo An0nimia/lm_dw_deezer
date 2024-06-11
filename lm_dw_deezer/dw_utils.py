@@ -1,7 +1,5 @@
 from tqdm import tqdm
 
-from api_deezer_full.media.types import Medias
-
 from importlib.util import find_spec
 
 be_dw_rust_supported = find_spec('lm_deezer_bf_dec')

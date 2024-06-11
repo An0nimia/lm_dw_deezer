@@ -4,12 +4,11 @@ from api_deezer_full import (
 
 from .logger import LOG
 from .config import CONF
+from .utils import merge_track_data
 
 from .dw_helpers.utils import (
 	create_dir, create_dir_w_track
 )
-
-from .utils import merge_track_data
 
 from .dw_utils import (
 	dw_track_seq, dw_album_seq, dw_album_thread,
@@ -46,8 +45,11 @@ class DW(API_PIPE):
 	def dw_track(
 		self,
 		id_track: int | str,
-		conf: CONF = CONF()
+		conf: CONF | None = None
 	) -> G_Track:
+
+		if conf is None:
+			conf = CONF()
 
 		LOG.info(f'Getting infos on \'{id_track}\'')
 		gw_info = self.gw_get_track(id_track)
@@ -93,8 +95,11 @@ class DW(API_PIPE):
 	def dw_album(
 		self,
 		id_album: int | str,
-		conf: CONF = CONF()
+		conf: CONF | None = None
 	) -> G_Album:
+
+		if conf is None:
+			conf = CONF()
 
 		LOG.info(f'Getting infos on \'{id_album}\'')
 		gw_info = self.gw_get_album(id_album)
@@ -155,8 +160,11 @@ class DW(API_PIPE):
 	def dw_playlist(
 		self,
 		id_playlist: int | str,
-		conf: CONF = CONF()
+		conf: CONF | None = None
 	) -> G_Playlist:
+
+		if conf is None:
+			conf = CONF()
 
 		LOG.info(f'Getting infos on \'{id_playlist}\'')
 		playlist_data = self.gw_get_playlist(id_playlist)

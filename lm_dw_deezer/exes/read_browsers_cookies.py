@@ -21,7 +21,7 @@ def read_firefox() -> str | None:
 	for file in files:
 		c_file = str(file.absolute())
 
-		if (not 'firefox' in c_file) or ('crashrecovery' in c_file):
+		if ('firefox' not in c_file) or ('crashrecovery' not in c_file):
 			continue
 		
 		db = connect(c_file)

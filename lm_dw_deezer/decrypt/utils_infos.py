@@ -1,3 +1,4 @@
+# trunk-ignore-all(bandit/B105)
 SECRET = 'g4el58wc0zvf9na1'
 IV = b'\x00\x01\x02\x03\x04\x05\x06\x07'
 SECRET_KEY = b'jo6aey6haid2Teih'

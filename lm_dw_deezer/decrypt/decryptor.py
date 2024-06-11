@@ -21,7 +21,11 @@ def decrypt_track(id_track: str, media_url: str, save_path: str):
 	# from what I understand every 6144 (2048 * 3) bytes the first 2048 bytes are encrypted using blowfish, this till the end. If a final chunck is lower than 2048 bytes is not encrypted
 
 	with (
-		req_get(media_url, stream = True) as resp,
+		req_get(
+			media_url,
+			stream = True,
+			timeout = 30
+		) as resp,
 	):
 		if resp.status_code != 200:
 			raise No_Stream_Data(id_track, save_path)
