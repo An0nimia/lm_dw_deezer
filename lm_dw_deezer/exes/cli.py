@@ -11,8 +11,6 @@ from typer import (
 from api_deezer_full import API_Mobile
 from api_deezer_full.media.exceptions import Insufficient_Rights
 
-from ..logger import LOG
-
 from ..config.conf import DEFAULT_SETTINGS_PATH
 
 from ..config import (
@@ -36,8 +34,6 @@ default_conf = CONF()
 
 if len(argv) != 1 and argv[1] not in ('set-arl', 'login'):
 	api_dw = init_check()
-
-LOG.disable_output()
 
 
 @app.command(name = 'set-arl', help = 'For setting deezer arl cookie')

@@ -2,8 +2,8 @@ from api_deezer_full import (
 	API_PIPE, API_Media
 )
 
-from .logger import LOG
 from .config import CONF
+from .logger import logger
 from .utils import merge_track_data
 
 from .dw_helpers.utils import (
@@ -35,8 +35,6 @@ from .types.pipe_ext import (
 )
 
 
-LOG()
-
 class DW(API_PIPE):
 	def __init__(self, arl: str) -> None:
 		super().__init__(arl) # init the father I mean the API instance
@@ -51,11 +49,11 @@ class DW(API_PIPE):
 		if conf is None:
 			conf = CONF()
 
-		LOG.info(f'Getting infos on \'{id_track}\'')
+		logger.info(f'Getting infos on \'{id_track}\'')
 		gw_info = self.gw_get_track(id_track)
-		LOG.debug(gw_info.__str__())
-		LOG.info(f'GOT infos on \'{id_track}\'')
-		LOG.info(f'Looking out for sources for \'{gw_info.title}\'')
+		logger.debug(gw_info.__str__())
+		logger.info(f'GOT infos on \'{id_track}\'')
+		logger.info(f'Looking out for sources for \'{gw_info.title}\'')
 
 		pipe_JSON = self.pipe_make_req(
 			get_track_query(gw_info.id)
@@ -101,11 +99,11 @@ class DW(API_PIPE):
 		if conf is None:
 			conf = CONF()
 
-		LOG.info(f'Getting infos on \'{id_album}\'')
+		logger.info(f'Getting infos on \'{id_album}\'')
 		gw_info = self.gw_get_album(id_album)
 		album_info = gw_info.tracks[0]
-		LOG.info(f'GOT infos on \'{id_album}\'')
-		LOG.info(f'Looking out for tracks sources in \'{album_info.album_title}\'')
+		logger.info(f'GOT infos on \'{id_album}\'')
+		logger.info(f'Looking out for tracks sources in \'{album_info.album_title}\'')
 
 		pipe_JSON = self.pipe_make_req(
 			get_album_query(album_info.id_album, gw_info.total)
@@ -138,7 +136,7 @@ class DW(API_PIPE):
 			track_tokens = tracks_token
 		)
 
-		LOG.info('GOT track sources')
+		logger.info('GOT track sources')
 
 		if not conf.THREAD_FUNC:
 			yield from dw_album_seq(
@@ -166,9 +164,9 @@ class DW(API_PIPE):
 		if conf is None:
 			conf = CONF()
 
-		LOG.info(f'Getting infos on \'{id_playlist}\'')
+		logger.info(f'Getting infos on \'{id_playlist}\'')
 		playlist_data = self.gw_get_playlist(id_playlist)
-		LOG.info(f'GOT infos on \'{id_playlist}\'')
+		logger.info(f'GOT infos on \'{id_playlist}\'')
 
 		pipe_JSON = self.pipe_make_req(
 			get_playlist_query(id_playlist, playlist_data.total)
