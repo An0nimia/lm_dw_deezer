@@ -12,7 +12,6 @@ else:
 from api_deezer_full.gw.types import Track
 from api_deezer_full.media.types import Medias
 
-from .logger import LOG
 from .exceptions import No_BE
 from .decrypt import decrypt_track as decrypt_track_w_C
 
@@ -48,7 +47,7 @@ def get_pbar(medias: Medias, tracks: list[Track]):
 		zip(
 			medias.medias, tracks
 		),
-		disable = not LOG.progress_bar,
+		disable = False,
 		desc = 'Starting downloading...',
 		total = len(tracks),
 		ascii = "▯▮"

@@ -1,7 +1,7 @@
 
 from api_deezer_full.gw.types.track import DEFAULT_DATE
 
-from ..logger import LOG
+from ..logger import logger
 
 from ..types.pipe_ext import Base_Album as PIPE_Base_Album
 
@@ -21,7 +21,7 @@ def tagger_track(
 ) -> None:
 
 	if dw_track.dw_track and pipe_info_album:
-		LOG.info(f'Adding tag to \'{dw_track.gw_info.title}\'')
+		logger.info(f'Adding tag to \'{dw_track.gw_info.title}\'')
 
 		tag(
 			dw_track = dw_track,
@@ -29,9 +29,9 @@ def tagger_track(
 			image_bytes = image_bytes,
 		)
 
-		LOG.info(f'Successful downloaded \'{dw_track.gw_info.title}\' at \'{dw_track.dw_track.path}\'')
+		logger.info(f'Successful downloaded \'{dw_track.gw_info.title}\' at \'{dw_track.dw_track.path}\'')
 	else:
-		LOG.warning(f'Track \'{dw_track.gw_info.title}\' - \'{dw_track.gw_info.artists[0].name}\' cannot be downloaded')
+		logger.warning(f'Track \'{dw_track.gw_info.title}\' - \'{dw_track.gw_info.artists[0].name}\' cannot be downloaded')
 
 
 def tag(
