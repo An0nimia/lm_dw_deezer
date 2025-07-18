@@ -1,5 +1,9 @@
+[lint]
+# Never enforce `E501` (line length violations). This should be handled by formatters.
+ignore = ["E501", "E402"]
 # Generic, formatter-friendly config.
 select = ["B", "D3", "E", "F"]
 
-# Never enforce `E501` (line length violations). This should be handled by formatters.
-ignore = ["E501", "E402"]
+[format]
+quote-style = "single"
+indent-style = "tab"
