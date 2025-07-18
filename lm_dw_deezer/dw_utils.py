@@ -2,13 +2,6 @@ from tqdm import tqdm
 
 from importlib.util import find_spec
 
-be_dw_rust_supported = find_spec('lm_deezer_bf_dec')
-
-if be_dw_rust_supported:
-	from lm_deezer_bf_dec import decrypt_track as decrypt_track_w_RUST
-else:
-	decrypt_track_w_RUST = None
-
 from api_deezer_full.gw.types import Track
 from api_deezer_full.media.types import Medias
 
@@ -41,11 +34,19 @@ from .dw_helpers import (
 	Helper_Track, Helper_Album, Helper_Playlist
 )
 
+be_dw_rust_supported = find_spec('lm_deezer_bf_dec')
+
+if be_dw_rust_supported:
+	from lm_deezer_bf_dec import decrypt_track as decrypt_track_w_RUST
+else:
+	decrypt_track_w_RUST = None
+
 
 def get_pbar(medias: Medias, tracks: list[Track]):
 	p_bar = tqdm(
 		zip(
-			medias.medias, tracks
+			medias.medias, tracks,
+			strict = True
 		),
 		disable = False,
 		desc = 'Starting downloading...',
@@ -98,7 +99,8 @@ def dw_album_seq(
 	dw_helper = get_be_dw(conf.DECRYPTOR)
 
 	for (media, gw_track_info), pipe_track_info in zip(
-		p_bar, album_info.pipe_info.tracks
+		p_bar, album_info.pipe_info.tracks,
+		strict = True
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
@@ -133,7 +135,8 @@ def dw_album_thread(
 	dw_helper = get_be_dw(conf.DECRYPTOR)
 
 	for (media, gw_track_info), pipe_track_info in zip(
-		p_bar, album_info.pipe_info.tracks
+		p_bar, album_info.pipe_info.tracks,
+		strict = True
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
@@ -182,7 +185,8 @@ def dw_playlist_seq(
 	dw_helper = get_be_dw(conf.DECRYPTOR)
 
 	for (media, gw_track_info), pipe_track_info in zip(
-		p_bar, playlist_info.pipe_info.tracks
+		p_bar, playlist_info.pipe_info.tracks,
+		strict = True
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
@@ -217,7 +221,8 @@ def dw_playlist_thread(
 	dw_helper = get_be_dw(conf.DECRYPTOR)
 
 	for (media, gw_track_info), pipe_track_info in zip(
-		p_bar, playlist_info.pipe_info.tracks
+		p_bar, playlist_info.pipe_info.tracks,
+		strict = True
 	):
 		p_bar.set_description(f'Downloading {gw_track_info.title}')
 
