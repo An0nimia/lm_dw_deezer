@@ -7,11 +7,14 @@
     pip install lm-dw-deezer
     ```
 1. W Rust backend
+
     > [!NOTE]
     > If you have already installed RUST you can jump this step
+
     ```bash
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     ```
+
     - Install
         ```bash
         pip install lm-dw-deezer[RUSTDW]

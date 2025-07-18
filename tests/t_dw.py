@@ -1,5 +1,5 @@
 from lm_dw_deezer import (
-	DW, Gen_Track, Gen_Album
+	DW, Gen_Track
 )
 
 import logging
