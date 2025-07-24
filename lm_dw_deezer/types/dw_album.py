@@ -44,8 +44,6 @@ class DW_Album:
 	gw_tracks_info: list[GW_Track]
 	pipe_info: PIPE_Album
 	dir_name: str
-	statuses: dict[str, STATUSES] = field(default_factory = dict)
-	dw_tracks: DW_Tracks = field(default_factory = list)
 	archive_path: str | None = None
 
 	image_bytes: bytes = field(
@@ -55,6 +53,8 @@ class DW_Album:
 
 
 	def __post_init__(self):
+		self.statuses: dict[int | str, STATUSES] = {}
+		self.dw_tracks: DW_Tracks = []
 		self.cover = self.gw_tracks_info[0].album_picture_md5
 		self.image_bytes, self.cover_url = get_image(self.cover, self.image)
 
@@ -69,7 +69,7 @@ class DW_Album:
 		return self.archive_path
 
 
-	def get_undownloaded(self) -> filter[str]:
+	def get_undownloaded(self) -> filter[int | str]:
 		return filter(
 			lambda track: self.statuses[track]['status'] == DW_STATUS.NOT_DOWNLOADED,
 			self.statuses

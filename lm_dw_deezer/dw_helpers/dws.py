@@ -51,7 +51,7 @@ def dw_helper(
 		track_out = Track_Out(
 			path = path,
 			media_format = media.media_type,
-			quality = QUALITY.get_quality(media.format),
+			quality = QUALITY(media.format),
 			quality_w = conf.QUALITIES[0],
 		)
 

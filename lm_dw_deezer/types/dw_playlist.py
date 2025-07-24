@@ -4,9 +4,7 @@ from typing import (
 	TYPE_CHECKING, TypedDict
 )
 
-from dataclasses import (
-	dataclass, field
-)
+from dataclasses import dataclass
 
 from requests import get as req_get
 
@@ -43,9 +41,12 @@ class DW_Playlist:
 	pipe_info: PIPE_Playlist
 	gw_tracks_info: list[GW_Track]
 	dir_name: str
-	dw_tracks: DW_Tracks = field(default_factory = list)
-	statuses: dict[str, STATUSES] = field(default_factory = dict)
 	archive_path: str | None = None
+
+
+	def __post_init__(self):
+		self.statuses: dict[int | str, STATUSES] = {}
+		self.dw_tracks: DW_Tracks = []
 
 
 	def get_image_url(self) -> str:
@@ -78,7 +79,7 @@ class DW_Playlist:
 		return self.archive_path
 
 
-	def get_undownloaded(self) -> filter[str]:
+	def get_undownloaded(self) -> filter[int | str]:
 		return filter(
 			lambda track: self.statuses[track]['status'] == DW_STATUS.NOT_DOWNLOADED,
 			self.statuses

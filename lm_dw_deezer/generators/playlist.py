@@ -14,11 +14,11 @@ class Gen_Playlist:
 
 
 	def __first(self) -> None:
-		self.playlist: DW_Playlist = next(self.__gen) #pyright: ignore [reportArgumentType]
+		self.playlist: DW_Playlist = next(self.__gen) #pyright: ignore [reportAttributeAccessIssue]
 
 
 	def next(self) -> Helper_Playlist:
-		return next(self.__gen) #pyright: ignore [reportArgumentType]
+		return next(self.__gen) #pyright: ignore [reportReturnType]
 
 
 	def __iter__(self) -> G_DW_Playlist:

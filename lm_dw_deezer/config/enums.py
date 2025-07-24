@@ -9,17 +9,6 @@ class QUALITY(StrEnum):
 	OK = 'MP3_128'
 
 
-	@classmethod
-	def get_quality(cls, quality: str) -> QUALITY:
-		return QUALITIES[quality]
-
-
-QUALITIES = {
-	quality.value: quality
-	for quality in QUALITY
-}
-
-
 class COMPRESSION(StrEnum):
 	ZSTD = 'ZSTD'
 	ZIP = 'ZIP'

@@ -12,20 +12,23 @@ from .dw_helpers.utils import (
 
 from .dw_utils import (
 	dw_track_seq, dw_album_seq, dw_album_thread,
-	dw_playlist_seq, dw_playlist_thread
+	dw_playlist_seq, dw_playlist_thread, dw_tracks_thread
 )
 
 from .graphql.queries import (
-	get_track_query, get_album_query, get_playlist_query
+	get_track_query, get_tracks_query,
+	get_album_query, get_playlist_query
 )
 
 from .generators import (
-	G_Track, G_Album, G_Playlist
+	G_Track, G_T_Tracks,
+	G_Album, G_Playlist
 )
 
 
 from .types import (
-	DW_Track, DW_Album, DW_Playlist
+	DW_Track, DW_T_Tracks,
+	DW_Album, DW_Playlist
 )
 
 from .types.pipe_ext import (
@@ -213,3 +216,67 @@ class DW(API_PIPE):
 
 		if conf.ARCHIVE:
 			playlist_info.create_archive(conf.ARCHIVE)
+
+
+	def dw_T_tracks(
+		self,
+		id_tracks_list: list[int | str],
+		conf: CONF | None = None
+	) -> G_T_Tracks:
+
+		if conf is None:
+			conf = CONF()
+
+		logger.debug(f'Received the following track ids {id_tracks_list}')
+		gw_infos = self.gw_get_tracks(id_tracks_list)
+
+		pipe_JSON = self.pipe_make_req(
+			get_tracks_query(id_tracks_list)
+		)
+
+		id_track_pipe_info = {
+			id_track: PIPE_Track.model_validate(track_pipe_info['node'])
+			for id_track, track_pipe_info in zip(
+				id_tracks_list,
+				pipe_JSON['data']['tracks']['edges'],
+				strict = True
+			)
+		}
+
+		id_track_gw_info = {
+			id_track: gw_info
+			for id_track, gw_info in zip(
+				id_tracks_list, gw_infos.tracks,
+				strict = True
+			)
+		}
+
+		dw_t_threads = DW_T_Tracks(
+			id_track_gw_info, id_track_pipe_info
+		)
+
+		yield dw_t_threads
+
+		tracks_token: list[str] = []
+
+		for track in gw_infos.tracks:
+			track_token = track.track_token
+
+			if track.fallback:
+				track_token = track.fallback.track_token
+
+			tracks_token.append(track_token)
+
+		medias = API_Media.get_medias(
+			license_token = self.license_token,
+			media_formats = [conf.MEDIA_FORMATS] * gw_infos.count,
+			track_tokens = tracks_token
+		)
+
+		logger.info('GOT track sources')
+
+		dw_tracks_thread(
+			medias = medias,
+			t_tracks_info = dw_t_threads,
+			conf = conf
+		)

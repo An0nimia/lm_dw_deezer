@@ -27,7 +27,7 @@ def get_track_query(id_track: str) -> dict[str, Any]:
 	return params
 
 
-def get_tracks_query(id_tracks: list[str]) -> dict[str, Any]:
+def get_tracks_query(id_tracks: list[int | str]) -> dict[str, Any]:
 	params = {
 		'operationName': 'get_tracks',
 		'variables': {

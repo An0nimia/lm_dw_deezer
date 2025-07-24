@@ -1,5 +1,3 @@
-#pyright: reportUnusedImport=false
-
 from .track import Track
 from .tracks import Tracks
 

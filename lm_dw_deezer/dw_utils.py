@@ -22,13 +22,15 @@ from .types.enums import DW_STATUS
 from .types.utils import wait_threads
 
 from .types import (
-	DW_Track, DW_Album, DW_Playlist
+	DW_Track, DW_T_Tracks,
+	DW_Album, DW_Playlist
 )
 
 from .dw_helpers.dws import F_BE_DW
 from .dw_helpers.track import G_DW_Track
 from .dw_helpers.album import G_DW_Album
 from .dw_helpers.playlist import G_DW_Playlist
+from .dw_helpers.t_tracks import Helper_T_Tracks
 
 from .dw_helpers import (
 	Helper_Track, Helper_Album, Helper_Playlist
@@ -251,6 +253,63 @@ def dw_playlist_thread(
 		c_thread = DW_Medjay(
 			target = thread_func.func,
 			args = (helper_playlist,),
+			event = event
+		)
+
+		c_thread.start()
+		threads.append(c_thread)
+		workers -= 1
+
+	wait_threads(threads)
+
+
+def dw_tracks_thread(
+	medias: Medias,
+	t_tracks_info: DW_T_Tracks,
+	conf: CONF
+) -> None:
+	thread_func: Thread_Func = conf.THREAD_FUNC #pyright: ignore [reportAssignmentType]
+	threads: list[DW_Medjay] = []
+	workers = thread_func.WORKERS
+	event = Event()
+
+	p_bar = get_pbar(
+		medias, list(
+			t_tracks_info.gw_tracks_info.values()
+		)
+	)
+
+	dw_helper = get_be_dw(conf.DECRYPTOR)
+
+	for (media, gw_track_info), pipe_track_info in zip(
+		p_bar, t_tracks_info.pipe_tracks_info.values(),
+		strict = True
+	):
+		p_bar.set_description(f'Downloading {gw_track_info.title}')
+
+		helper_t_tracks = Helper_T_Tracks(
+			gw_track_info = gw_track_info,
+			pipe_track_info = pipe_track_info,
+			media = media,
+			conf = conf,
+			t_tracks_info = t_tracks_info,
+			func_be_dw = dw_helper
+		)
+
+		t_tracks_info.info[gw_track_info.id]['helper'] = helper_t_tracks
+		t_tracks_info.info[gw_track_info.id]['status'] = DW_STATUS.NOT_DOWNLOADED
+
+		if workers == 0:
+			wait_threads(threads)
+
+			if event.is_set():
+				break
+
+			workers = thread_func.WORKERS
+
+		c_thread = DW_Medjay(
+			target = thread_func.func,
+			args = (helper_t_tracks,),
 			event = event
 		)
 

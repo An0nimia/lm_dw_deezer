@@ -10,6 +10,10 @@ from .playlist import (
 	Gen_Playlist, G_Playlist
 )
 
+from .t_tracks import (
+	Gen_T_Track, G_T_Tracks
+)
+
 
 __all__ = (
 	'Gen_Track',
@@ -17,5 +21,7 @@ __all__ = (
 	'Gen_Album',
 	'G_Album',
 	'Gen_Playlist',
-	'G_Playlist'
+	'G_Playlist',
+	'Gen_T_Track',
+	'G_T_Tracks'
 )

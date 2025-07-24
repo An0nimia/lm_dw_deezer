@@ -15,11 +15,11 @@ class Gen_Album:
 
 
 	def __first(self) -> None:
-		self.album: DW_Album = next(self.__gen) #pyright: ignore [reportArgumentType]
+		self.album: DW_Album = next(self.__gen) #pyright: ignore [reportAttributeAccessIssue]
 
 
 	def next(self) -> Helper_Album:
-		return next(self.__gen) #pyright: ignore [reportArgumentType]
+		return next(self.__gen) #pyright: ignore [reportReturnType]
 
 
 	def __iter__(self) -> G_DW_Album:
